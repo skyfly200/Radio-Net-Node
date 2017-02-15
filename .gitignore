@@ -46,5 +46,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+<<<<<<< HEAD
 # node modules folder
 node_modules/
+=======
+# ignore nopde_modules folder of NPM
+node_modules/
+>>>>>>> origin/master
