@@ -1,0 +1,24 @@
+html
+  include includes/head.pug
+  +head('Radio DJ Play Controls')
+    script(type='text/javascript', src='/lib/components.js')
+    script(type='text/javascript', src='/lib/controls.js')
+  
+  body
+    #wrapper
+      h1 Radio DJ Controls
+      #current_info
+        h3
+          | Now Playing: 
+          #current_info_string
+      .buttons
+        button(onclick='pause(0)') Play
+        button(onclick='pause(1)') Pause
+        button(onclick='restart()') Restart
+        button(onclick='next()') Next
+        button(onclick='stop()') Stop
+        button(onclick='clear()') Clear Playlist
+        button(onclick='loadFile(1643)') Way High Stream
+      .info
+        #queue_table
+      .root

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 html
   head
     title= title
@@ -39,45 +38,3 @@ html
       textarea(name='data' rows="10" cols="30")= data
       br
       input(type='submit')
-=======
-html
-  head
-    title= title
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous")
-    link(rel="stylesheet" href="/style.css" media="screen" charset="utf-8")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")
-  body
-    h1= title
-    form#event-form(action=action autocomplete='off')
-      if action=='/event-update'
-        lable ID:
-        input(type='text' name='id' size='4' value=id readonly)
-      lable Event Name:
-      input(type='text' name='name' value=name)
-      lable Event Enabled:
-      input(type='checkbox' name='enabled' checked= enabled=='True')
-      lable Event Category:
-      select(name='catID')
-        each val, i in categories
-          option(value=catIDs[i] selected= i==catID )= val
-      br
-      lable Event Schedule Type:
-      select(name='type')
-        each val, i in types
-          option(value=i selected= i==type )= val
-      lable Event Time:
-      input(type='text' name='time' value=time)
-      lable Event Date:
-      input(type='text' name='date' value=date)
-      lable Event Day:
-      input(type='text' name='day' value=day)
-      lable Event Hours:
-      input(type='text' name='hours' value=hours)
-      br
-      lable Event Actions:
-      br
-      textarea(name='data' rows="10" cols="30")= data
-      br
-      input(type='submit')
->>>>>>> origin/master

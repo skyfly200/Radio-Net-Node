@@ -2,10 +2,21 @@
   "name": "node-mysql",
   "main": "index.js",
   "version": "0.0.1",
+  "scripts": {
+    "build": "babel public/js -d public/lib"
+  },
   "dependencies": {
     "express": "^4.10.6",
     "moment": "^2.17.1",
     "mysql": "^2.5.4",
-    "pug": "^2.0.0-beta11"
+    "pug": "^2.0.0-beta11",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.5.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
   }
 }
