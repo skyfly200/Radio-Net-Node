@@ -81,7 +81,7 @@ app.get("/controls",function(req,res){
   res.render('controls');
 });
 
-// player controls page
+// playback history page
 app.get("/history",function(req,res){
   res.render('history');
 });
