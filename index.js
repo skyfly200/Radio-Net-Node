@@ -20,8 +20,10 @@ var querys = {
   "queue":"SELECT queuelist.id, queuelist.artist, songs.title, songs.duration from queuelist left join songs on queuelist.songID=songs.ID",
   "history":"SELECT date_played, artist, album, title from history ORDER BY date_played DESC",
   "current":"SELECT date_played, artist, album, title from history ORDER BY date_played DESC LIMIT 1",
-  "song_id":"SELECT * FROM songs WHERE ID=?",
-  "songs":"SELECT * FROM songs LIMIT 100"
+  "songs":"SELECT * FROM songs LIMIT 100",
+  "song_id":"SELECT * FROM songs WHERE ID =?",
+  "song_type":"SELECT * FROM songs WHERE song_type = ?",
+  "song_subcat":"SELECT * FROM songs WHERE id_subcat = ?"
 };
 
 // run a query

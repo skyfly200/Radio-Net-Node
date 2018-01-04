@@ -1,5 +1,16 @@
 'use strict';
 
+$(document).ready(function () {
+  // Load the Visualization API and the corechart package.
+  google.charts.load('current', { 'packages': ['table'] });
+
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.charts.setOnLoadCallback(drawChart);
+
+  var eventID = -1;
+  var selection = -1;
+});
+
 function displaySelected(e) {
   selection = table.getSelection();
   if (selection[0]) {
@@ -58,17 +69,20 @@ function copyEvent() {
 function drawChart() {
   getEvents(function (resp, stat) {
     // Create the data table.
-    data = new google.visualization.DataTable();
+    var data = new google.visualization.DataTable();
     data.addColumn('number', 'ID');
     data.addColumn('string', 'Title');
     data.addColumn('string', 'Time & Date');
     data.addColumn('string', 'Category');
     data.addColumn('string', 'Enabled');
 
-    console.log(resp);
+    // Set chart options
+    var options = {
+      'title': 'Events',
+      'height': 19
+    };
 
     // dynamicly set height by number of items up to max
-    options.height = 19;
     var heightMax = 600;
     var itemHeight = 40;
 
@@ -80,26 +94,10 @@ function drawChart() {
     });
 
     // Instantiate our chart
-    table = new google.visualization.Table(document.getElementById('queue_table'));
+    var table = new google.visualization.Table(document.getElementById('queue_table'));
 
     google.visualization.events.addListener(table, 'select', displaySelected);
 
     table.draw(data, options);
   });
 }
-
-$(document).ready(function () {
-  // Load the Visualization API and the corechart package.
-  google.charts.load('current', { 'packages': ['table'] });
-
-  // Set chart options
-  options = {
-    'title': 'Events'
-  };
-
-  // Set a callback to run when the Google Visualization API is loaded.
-  google.charts.setOnLoadCallback(drawChart);
-
-  eventID = -1;
-  selection = -1;
-});

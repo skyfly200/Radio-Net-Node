@@ -11,14 +11,18 @@ html
         h3
           | Now Playing: 
           #current_info_string
-      .buttons
+      .playback-controls
         button(onclick='pause(0)') Play
         button(onclick='pause(1)') Pause
         button(onclick='restart()') Restart
         button(onclick='next()') Next
         button(onclick='stop()') Stop
         button(onclick='clear()') Clear Playlist
-        button(onclick='loadFile(1643)') Way High Stream
-      .info
+      .queue
         #queue_table
-      .root
+      .dynamic
+        #root
+      .stream-controls
+        select()#stream_selector
+        button(onclick='loadStream()') Load Stream
+      

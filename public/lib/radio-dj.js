@@ -46,7 +46,6 @@ function displayCurrent(divID) {
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : c;
 
   currentTrack(function (resp, stat) {
-    console.log(resp);
     var i = resp[0];
     var info_string = i.title + " - " + i.artist;
     $(divID).text(info_string);
@@ -59,6 +58,20 @@ function songByID(id) {
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : c;
 
   $.get("/query?q=song_id&arg=" + id, callback);
+}
+
+// get song info by type
+function songsByType(type) {
+  var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : c;
+
+  $.get("/query?q=song_type&arg=" + type, callback);
+}
+
+// get song info by subcat
+function songsBySubcat(subcat) {
+  var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : c;
+
+  $.get("/query?q=song_subcat&arg=" + subcat, callback);
 }
 
 // get current track info
