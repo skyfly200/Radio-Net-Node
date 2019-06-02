@@ -24,7 +24,7 @@ var pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'Prism1984',
-  database: 'radiodj161',
+  database: 'radiodj2',
   debug: false
 });
 
@@ -50,7 +50,8 @@ function queryDatabase(queryID, args, callback) {
 
     pool.getConnection(function(err,connection){
         if (err) {
-          callback({"code" : 100, "status" : "Error in connection database"});
+          console.log(err);
+          callback({"code" : 100, "status" : "Error connecting to database"});
           return;
         }
 
@@ -66,7 +67,7 @@ function queryDatabase(queryID, args, callback) {
         });
 
         connection.on('error', function(err) {
-          if (!err) { callback({"code" : 100, "status" : "Error in connection database"}); }
+          if (!err) { callback({ "code": 100, "status": "Error in database connection"}); }
           return;
         });
   });
@@ -115,9 +116,9 @@ app.get("/events",function(req,res){
 // -- API Routing
 
 app.get("/query",function(req,res){
-  var query = req.param.q;
+  var query = req.query.q;
   if (typeof query === 'undefined') return res.send("Incorect query (q) parameter: " + query);
-  var arg = req.param.arg;
+  var arg = req.query.arg;
   var args = typeof arg==Array ? arg : [arg];
   queryDatabase(query, args, function(data) {
     res.json(data);
@@ -125,8 +126,8 @@ app.get("/query",function(req,res){
 });
 
 app.get("/event-form",function(req,res){
-  var id = req.param.id;
-  var copy = req.param.copy;
+  var id = req.query.id;
+  var copy = req.query.copy;
   if (typeof id === 'undefined') { id = -1; }
   queryDatabase('event_get', [id], function(eventData) {
     // edit event if id exists, else serve empty form
@@ -169,15 +170,15 @@ app.get("/event-form",function(req,res){
 // add an event
 app.get("/event-new",function(req,res){
   var values = [
-    req.param.name,
-    req.param.type,
-    moment(req.param.date==='' ? [] : req.param.date.format('YYYY-MM-DD')),
-    moment(req.param.time==='' ? [] : req.param.time.format('HH:mm:ss')),
-    req.param.day==='' ? '&' : req.param.day,
-    req.param.hours==='' ? '&' : req.param.hours,
-    req.param.data==='' ? null : req.param.data,
-    req.param.enabled==='on' ? 'True' : 'False',
-    req.param.catID==='' ? 1 : req.param.catID
+    req.query.name,
+    req.query.type,
+    moment(req.query.date==='' ? [] : req.query.date.format('YYYY-MM-DD')),
+    moment(req.query.time==='' ? [] : req.query.time.format('HH:mm:ss')),
+    req.query.day==='' ? '&' : req.query.day,
+    req.query.hours==='' ? '&' : req.query.hours,
+    req.query.data==='' ? null : req.query.data,
+    req.query.enabled==='on' ? 'True' : 'False',
+    req.query.catID==='' ? 1 : req.query.catID
   ];
   //console.log(values);
   queryDatabase('event_new', values, function(resp) {
@@ -189,16 +190,16 @@ app.get("/event-new",function(req,res){
 // update an event
 app.get("/event-update",function(req,res){
   var values = [
-    req.param.name,
-    req.param.type,
-    moment(req.param.date==='' ? [] : req.param.date).format('YYYY-MM-DD'),
-    moment(req.param.time==='' ? [] : req.param.time).format('HH:mm:ss'),
-    req.param.day==='' ? '&' : req.param.day,
-    req.param.hours==='' ? '&' : req.param.hours,
-    req.param.data==='' ? null : req.param.data,
-    req.param.enabled==='on' ? 'True' : 'False',
-    req.param.catID==='' ? 1 : req.param.catID,
-    req.param.id
+    req.query.name,
+    req.query.type,
+    moment(req.query.date==='' ? [] : req.query.date).format('YYYY-MM-DD'),
+    moment(req.query.time==='' ? [] : req.query.time).format('HH:mm:ss'),
+    req.query.day==='' ? '&' : req.query.day,
+    req.query.hours==='' ? '&' : req.query.hours,
+    req.query.data==='' ? null : req.query.data,
+    req.query.enabled==='on' ? 'True' : 'False',
+    req.query.catID==='' ? 1 : req.query.catID,
+    req.query.id
   ];
   queryDatabase('event_update', values, function(resp) {
     res.redirect('/events');
@@ -230,10 +231,10 @@ function getPath(endpoint) {
 
 // options endpoint
 app.get("/opt", function (req, res) {
-  var command = req.paramcommand;
-  var arg = req.param.arg;
+  var command = req.query.command;
+  var arg = req.query.arg;
   if (typeof command === 'undefined') return res.send("Incorect parameter: " + command);
-  if (typeof req.param.arg === 'undefined') arg = '';
+  if (typeof req.query.arg === 'undefined') arg = '';
   axios.get(getPath("options"), {
       params: {
         auth: password,
@@ -241,8 +242,8 @@ app.get("/opt", function (req, res) {
         arg: arg
       }
     })
-    .then( body => {
-      res.json(body);
+    .then( (data) => {
+      res.sendStatus(data.status);
     })
     .catch(error => {
       console.log(error);
@@ -277,7 +278,7 @@ app.get("/p", function (req, res) {
 
 // get info on song in queue by index
 app.get("/pitem", function (req, res) {
-  var index = req.param.i;
+  var index = req.query.i;
   if (typeof index !== number) return res.send("Incorect index parameter: " + index);
   axios.get(getPath("options"), {
     params: {

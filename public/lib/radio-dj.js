@@ -12,7 +12,7 @@ function sendControl(command) {
   var arg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
   var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : c;
 
-  console.log(command + " " + arg);
+  // console.log(command, arg);
   $.get("/opt", { command: command, arg: arg }, callback);
 }
 
@@ -47,7 +47,7 @@ function displayCurrent(divID) {
 
   currentTrack(function (resp, stat) {
     var i = resp[0];
-    var info_string = i.title + " - " + i.artist;
+    var info_string = (i === undefined ? "" : i.title + " - " + i.artist);
     $(divID).text(info_string);
     callback();
   });

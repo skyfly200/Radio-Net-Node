@@ -1,7 +1,6 @@
 html
   include includes/head.pug
   +head('Radio DJ Play Controls')
-    script(type='text/javascript', src='/lib/components.js')
     script(type='text/javascript', src='/lib/controls.js')
   
   body
@@ -20,8 +19,6 @@ html
         button(onclick='clear()') Clear Playlist
       .queue
         #queue_table
-      .dynamic
-        #root
       .stream-controls
         select()#stream_selector
         button(onclick='loadStream()') Load Stream
