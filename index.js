@@ -1,21 +1,32 @@
-var mysql     =    require('mysql');
-var request   =    require("request");
-var express   =    require("express");
-var moment    =    require('moment');
-
-require('dotenv').config();
+const mysql = require('mysql');
+const express = require("express");
+const moment = require('moment');
+const env = require('dotenv').config();
 const axios = require('axios');
-var parseString = require('xml2js').parseString;
+const parseString = require('xml2js').parseString;
 const fs = require('fs');
 
+// express init and config
 var app = express();
 var port = process.env.PORT || 8080;
 
 // log file path
 const logFile = 'log.txt';
 
+// ------ SQL DatabaseSQL  ------
+
 // titles of event run types
 var event_run_types = ['No Repeat', 'Repeat by Day', 'Repeat by Day and Hour', 'Manual Event', 'Start-up Event'];
+
+// Data Base Connection Pool
+var pool = mysql.createPool({
+  connectionLimit: 100, //important
+  host: 'localhost',
+  user: 'root',
+  password: 'Prism1984',
+  database: 'radiodj161',
+  debug: false
+});
 
 // SQL Query List
 var querys = {
@@ -33,20 +44,6 @@ var querys = {
   "song_type":"SELECT * FROM songs WHERE song_type = ?",
   "song_subcat":"SELECT * FROM songs WHERE id_subcat = ?"
 };
-
-// build a URI from an enpoint and config vars
-function getPath(endpoint) {
-  if (!endpoint) endpoint = "nowPlaying";
-  return protocol + "://" + hostname + ":" + port + "/" + endpoints[endpoint];
-}
-
-// write an action to the log file
-function logAction(action) {
-  var logLine = new Date().toLocaleString() + " - " + action + "\n";
-  fs.appendFile(logFile, logLine, (err) => {
-    if (err) throw err;
-  });
-}
 
 // run a query
 function queryDatabase(queryID, args, callback) {
@@ -75,15 +72,15 @@ function queryDatabase(queryID, args, callback) {
   });
 }
 
-// Data Base Connection Pool
-var pool = mysql.createPool({
-    connectionLimit : 100, //important
-    host     : 'localhost',
-    user     : 'root',
-    password : 'Prism1984',
-    database : 'radiodj161',
-    debug    :  false
-});
+// ----- Utility Functions ------
+
+// write an action to the log file
+function logAction(action) {
+  var logLine = new Date().toLocaleString() + " - " + action + "\n";
+  fs.appendFile(logFile, logLine, (err) => {
+    if (err) throw err;
+  });
+}
 
 // ------ Express Routing ------
 
@@ -210,42 +207,91 @@ app.get("/event-update",function(req,res){
 
 // ---- REST API Proxy ----
 
-// commands
-app.get("/opt",function(req,res){
-  var command = req.param('command');
-  var arg = '';
-  if (typeof command === 'undefined') { res.send("Incorect parameter: " + command); return; }
-  if (typeof req.param('arg') !== 'undefined') { arg = '&arg=' + req.param('arg'); }
+// configure RadioDJ REST API requests
+const protocol = "http";
+const hostname = process.env.RADIODJ_HOSTNAME || "localhost";
+const apiPort = process.env.RADIODJ_PORT || "7000";
+const password = process.env.RADIODJ_PASSWORD || "hackme";
 
-  request(("http://127.0.0.1:7000/opt?auth=changeme&command="+command+arg), function(error, response, body) {
-    res.json(body);
-  });
+// endpoints available on the API
+const endpoints = {
+  options: "opt",
+  playlist: "p",
+  playlistItem: "pitem",
+  nowPlaying: "np",
+  nowPlayingJSON: "npjson"
+};
+
+// build a URI from an enpoint and config vars
+function getPath(endpoint) {
+  if (!endpoint) endpoint = "nowPlaying";
+  return protocol + "://" + hostname + ":" + apiPort + "/" + endpoints[endpoint];
+}
+
+// options endpoint
+app.get("/opt", function (req, res) {
+  var command = req.param('command');
+  var arg = req.param('arg');
+  if (typeof command === 'undefined') return res.send("Incorect parameter: " + command);
+  if (typeof req.param('arg') === 'undefined') arg = '';
+  axios.get(getPath("options"), {
+      params: {
+        auth: password,
+        command: command,
+        arg: arg
+      }
+    })
+    .then( body => {
+      res.json(body);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 // get now playing
-app.get("/np",function(req,res){
-  request("http://127.0.0.1:7000/np?auth=changeme", function(error, response, body) {
-    res.json(body);
-  });
+app.get("/np", function (req, res) {
+  axios.get(getPath("nowPlaying"), {
+    params: { auth: password }
+  })
+    .then(body => {
+      res.json(body);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 // get play queue, starting with current song
-app.get("/p",function(req,res){
-  request("http://127.0.0.1:7000/p?auth=changeme", function(error, response, body) {
-    res.json(body);
-  });
+app.get("/p", function (req, res) {
+  axios.get(getPath("playlist"), {
+    params: { auth: password }
+  })
+    .then(body => {
+      res.json(body);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 // get info on song in queue by index
-app.get("/pitem",function(req,res){
+app.get("/pitem", function (req, res) {
   var index = req.param('i');
-  if (typeof index === 'undefined') { res.send("Incorect parameter: " + req.param('i')); return; }
-  request(("http://127.0.0.1:7000/pitem?auth=changeme&arg="+index), function(error, response, body) {
-    res.json(body);
-  });
+  if (typeof index !== number) return res.send("Incorect index parameter: " + index);
+  axios.get(getPath("options"), {
+    params: {
+      auth: password,
+      arg: index
+    }
+  })
+    .then(body => {
+      res.json(body);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
-
-
 
 // 404 error page
 app.use(function (req, res, next) {
