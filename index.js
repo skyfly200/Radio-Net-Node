@@ -3,8 +3,16 @@ var request   =    require("request");
 var express   =    require("express");
 var moment    =    require('moment');
 
+require('dotenv').config();
+const axios = require('axios');
+var parseString = require('xml2js').parseString;
+const fs = require('fs');
+
 var app = express();
 var port = process.env.PORT || 8080;
+
+// log file path
+const logFile = 'log.txt';
 
 // titles of event run types
 var event_run_types = ['No Repeat', 'Repeat by Day', 'Repeat by Day and Hour', 'Manual Event', 'Start-up Event'];
@@ -25,6 +33,20 @@ var querys = {
   "song_type":"SELECT * FROM songs WHERE song_type = ?",
   "song_subcat":"SELECT * FROM songs WHERE id_subcat = ?"
 };
+
+// build a URI from an enpoint and config vars
+function getPath(endpoint) {
+  if (!endpoint) endpoint = "nowPlaying";
+  return protocol + "://" + hostname + ":" + port + "/" + endpoints[endpoint];
+}
+
+// write an action to the log file
+function logAction(action) {
+  var logLine = new Date().toLocaleString() + " - " + action + "\n";
+  fs.appendFile(logFile, logLine, (err) => {
+    if (err) throw err;
+  });
+}
 
 // run a query
 function queryDatabase(queryID, args, callback) {

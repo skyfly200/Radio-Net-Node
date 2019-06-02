@@ -1,17 +1,25 @@
 {
-  "name": "node-mysql",
+  "name": "radio-net-node",
   "main": "index.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "author": {
+    "name": "Skyler Fly-Wilson",
+    "email": "skyler@skylerfly.com",
+    "url": "https://skylerfly.com/"
+  },
   "scripts": {
     "build": "babel public/js -d public/lib"
   },
   "dependencies": {
+    "axios": "^0.19.0",
+    "dotenv": "^8.0.0",
     "express": "^4.10.6",
     "moment": "^2.20.1",
     "mysql": "^2.5.4",
     "pug": "^2.0.0-beta11",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

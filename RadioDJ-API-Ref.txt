@@ -1,0 +1,31 @@
+RadioDJ REST API Rfrence: https://www.radiodj.ro/community/index.php?topic=6155.0
+
+--- Endpoints ---
+/np?auth=[password]
+/npjson?auth=[password]
+/opt?auth=[password]&command=[command]&arg=[argument]
+/p?auth=[password]
+/pitem?auth=[password]&arg=[zero based track number from the playlist]
+
+--- Commands ---
+PlayPlaylistTrack 'Zero based track number from playlist
+RemovePlaylistTrack 'Zero based track number from playlist
+StopPlayer
+PausePlayer 'arg=0 to unpause, 1 to pause
+RestartPlayer
+PlayFromIntro
+ClearPlaylist
+LoadTrackToTop 'Song ID as argument
+LoadTrackToBottom 'Song ID as argument
+LoadPlaylist 'Playlist ID as argument
+EnableAutoDJ 'arg=0 to disable, 1 to enable
+EnableAssisted 'arg=0 to disable, 1 to enable
+EnableEvents 'arg=0 to disable, 1 to enable
+RefreshEvents
+EnableInput 'arg=0 to disable, 1 to enable
+PlaycartByNumber 'cart number as argument
+StatusAutoDJ 'Get the status of AutoDJ option as boolean
+StatusAssisted 'Get the status of Assisted option as boolean
+StatusInput 'Get the status of Input option as boolean
+StatusQueue 'Get queue playlist number of tracks
+ShowMessage 'Display a message in RadioDJ. Message as argument
