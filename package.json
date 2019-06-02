@@ -8,6 +8,7 @@
     "url": "https://skylerfly.com/"
   },
   "scripts": {
+    "dev": "node index.js",
     "build": "babel public/js -d public/lib"
   },
   "dependencies": {
