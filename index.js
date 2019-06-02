@@ -87,7 +87,7 @@ function logAction(action) {
 // static serve dirctory
 app.use(express.static('public'));
 
-// rendered views directory
+// set template engine
 app.set('view engine', 'pug');
 
 // -- Define pug rendered pages paths
@@ -112,7 +112,7 @@ app.get("/events",function(req,res){
   res.render('events');
 });
 
-// -- API Function Routing
+// -- API Routing
 
 app.get("/query",function(req,res){
   var query = req.param.q;
@@ -130,7 +130,7 @@ app.get("/event-form",function(req,res){
   if (typeof id === 'undefined') { id = -1; }
   queryDatabase('event_get', [id], function(eventData) {
     // edit event if id exists, else serve empty form
-    var values = eventData[0];
+    var values = (eventData[0] === undefined ? {} : eventData[0]);
     values.id = id;
     if (values && copy) {
       values.title = ('Copy Event '+id);
@@ -182,7 +182,7 @@ app.get("/event-new",function(req,res){
   //console.log(values);
   queryDatabase('event_new', values, function(resp) {
     //console.log(resp);
-    res.redirect('/events-list.html');
+    res.redirect('/events');
   });
 });
 
@@ -201,11 +201,11 @@ app.get("/event-update",function(req,res){
     req.param.id
   ];
   queryDatabase('event_update', values, function(resp) {
-    res.redirect('/events-list.html');
+    res.redirect('/events');
   });
 });
 
-// ---- REST API Proxy ----
+// ---- RadioDJ REST API Proxy ----
 
 // configure RadioDJ REST API requests
 const protocol = "http";
@@ -295,7 +295,7 @@ app.get("/pitem", function (req, res) {
 
 // 404 error page
 app.use(function (req, res, next) {
-  res.render('404', { title: 'Home', message: 'Error 404 - Page not found!' });
+  res.render('404', { title: '404', message: 'Error 404 - Page not found!' });
 });
 
 // start the server
