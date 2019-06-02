@@ -2,10 +2,10 @@
 
 $(document).ready(function () {
   // Load the Visualization API and the corechart package.
-  google.charts.load('current', { 'packages': ['table'] });
+  google.charts.load('current', { 'packages': ['table'], 'callback': drawChart });
 
   // Set a callback to run when the Google Visualization API is loaded.
-  google.charts.setOnLoadCallback(drawChart);
+  google.charts.setOnLoadCallback();
 
   var eventID = -1;
   var selection = -1;

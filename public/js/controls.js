@@ -9,7 +9,7 @@ function selectHandler(e) {
 function drawChart() {
   playQueue( function(resp, stat) {
     // Create the data table.
-    data = new google.visualization.DataTable();
+    let data = new google.visualization.DataTable();
     data.addColumn('string', 'Artist');
     data.addColumn('string', 'Title');
 
@@ -20,7 +20,7 @@ function drawChart() {
     });
 
     // Instantiate our chart
-    table = new google.visualization.Table(document.getElementById('queue_table'));
+    let table = new google.visualization.Table(document.getElementById('queue_table'));
 
     google.visualization.events.addListener(table, 'select', selectHandler);
 
@@ -38,7 +38,7 @@ $(document).ready( function() {
 
   // Set chart options
   options = {
-    showRowNumber: true,
+    'showRowNumber': true,
     'title':'Upcoming Tracks',
     'width':400,
     'height':350

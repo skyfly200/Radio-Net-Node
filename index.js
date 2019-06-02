@@ -115,9 +115,9 @@ app.get("/events",function(req,res){
 // -- API Function Routing
 
 app.get("/query",function(req,res){
-  var query = req.param('q');
-  if (typeof query === 'undefined') { res.send("Incorect query (q) parameter: " + query); return; }
-  var arg = req.param('arg');
+  var query = req.param.q;
+  if (typeof query === 'undefined') return res.send("Incorect query (q) parameter: " + query);
+  var arg = req.param.arg;
   var args = typeof arg==Array ? arg : [arg];
   queryDatabase(query, args, function(data) {
     res.json(data);
@@ -125,8 +125,8 @@ app.get("/query",function(req,res){
 });
 
 app.get("/event-form",function(req,res){
-  var id = req.param('id');
-  var copy = req.param('copy');
+  var id = req.param.id;
+  var copy = req.param.copy;
   if (typeof id === 'undefined') { id = -1; }
   queryDatabase('event_get', [id], function(eventData) {
     // edit event if id exists, else serve empty form
@@ -169,15 +169,15 @@ app.get("/event-form",function(req,res){
 // add an event
 app.get("/event-new",function(req,res){
   var values = [
-    req.param('name'),
-    req.param('type'),
-    moment(req.param('date')==='' ? [] : req.param('date')).format('YYYY-MM-DD'),
-    moment(req.param('time')==='' ? [] : req.param('time')).format('HH:mm:ss'),
-    req.param('day')==='' ? '&' : req.param('day'),
-    req.param('hours')==='' ? '&' : req.param('hours'),
-    req.param('data')==='' ? null : req.param('data'),
-    req.param('enabled')==='on' ? 'True' : 'False',
-    req.param('catID')==='' ? 1 : req.param('catID')
+    req.param.name,
+    req.param.type,
+    moment(req.param.date==='' ? [] : req.param.date.format('YYYY-MM-DD')),
+    moment(req.param.time==='' ? [] : req.param.time.format('HH:mm:ss')),
+    req.param.day==='' ? '&' : req.param.day,
+    req.param.hours==='' ? '&' : req.param.hours,
+    req.param.data==='' ? null : req.param.data,
+    req.param.enabled==='on' ? 'True' : 'False',
+    req.param.catID==='' ? 1 : req.param.catID
   ];
   //console.log(values);
   queryDatabase('event_new', values, function(resp) {
@@ -189,16 +189,16 @@ app.get("/event-new",function(req,res){
 // update an event
 app.get("/event-update",function(req,res){
   var values = [
-    req.param('name'),
-    req.param('type'),
-    moment(req.param('date')==='' ? [] : req.param('date')).format('YYYY-MM-DD'),
-    moment(req.param('time')==='' ? [] : req.param('time')).format('HH:mm:ss'),
-    req.param('day')==='' ? '&' : req.param('day'),
-    req.param('hours')==='' ? '&' : req.param('hours'),
-    req.param('data')==='' ? null : req.param('data'),
-    req.param('enabled')==='on' ? 'True' : 'False',
-    req.param('catID')==='' ? 1 : req.param('catID'),
-    req.param('id')
+    req.param.name,
+    req.param.type,
+    moment(req.param.date==='' ? [] : req.param.date).format('YYYY-MM-DD'),
+    moment(req.param.time==='' ? [] : req.param.time).format('HH:mm:ss'),
+    req.param.day==='' ? '&' : req.param.day,
+    req.param.hours==='' ? '&' : req.param.hours,
+    req.param.data==='' ? null : req.param.data,
+    req.param.enabled==='on' ? 'True' : 'False',
+    req.param.catID==='' ? 1 : req.param.catID,
+    req.param.id
   ];
   queryDatabase('event_update', values, function(resp) {
     res.redirect('/events-list.html');
@@ -230,10 +230,10 @@ function getPath(endpoint) {
 
 // options endpoint
 app.get("/opt", function (req, res) {
-  var command = req.param('command');
-  var arg = req.param('arg');
+  var command = req.paramcommand;
+  var arg = req.param.arg;
   if (typeof command === 'undefined') return res.send("Incorect parameter: " + command);
-  if (typeof req.param('arg') === 'undefined') arg = '';
+  if (typeof req.param.arg === 'undefined') arg = '';
   axios.get(getPath("options"), {
       params: {
         auth: password,
@@ -277,7 +277,7 @@ app.get("/p", function (req, res) {
 
 // get info on song in queue by index
 app.get("/pitem", function (req, res) {
-  var index = req.param('i');
+  var index = req.param.i;
   if (typeof index !== number) return res.send("Incorect index parameter: " + index);
   axios.get(getPath("options"), {
     params: {
