@@ -256,7 +256,20 @@ app.get("/np", function (req, res) {
     params: { auth: password }
   })
     .then(body => {
-      res.json(body);
+      res.status(body.status).send(body.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+});
+
+// get now playing as JSON
+app.get("/npjson", function (req, res) {
+  axios.get(getPath("nowPlayingJSON"), {
+    params: { auth: password }
+  })
+    .then(body => {
+      res.status(body.status).send(body.data);
     })
     .catch(error => {
       console.log(error);
@@ -269,7 +282,7 @@ app.get("/p", function (req, res) {
     params: { auth: password }
   })
     .then(body => {
-      res.json(body);
+      res.status(body.status).send(body.data);
     })
     .catch(error => {
       console.log(error);
@@ -278,16 +291,16 @@ app.get("/p", function (req, res) {
 
 // get info on song in queue by index
 app.get("/pitem", function (req, res) {
-  var index = req.query.i;
-  if (typeof index !== number) return res.send("Incorect index parameter: " + index);
-  axios.get(getPath("options"), {
+  var index = parseInt(req.query.i);
+  if (typeof index === NaN) return res.send("Incorect index parameter: " + index);
+  axios.get(getPath("playlistItem"), {
     params: {
       auth: password,
       arg: index
     }
   })
     .then(body => {
-      res.json(body);
+      res.status(body.status).send(body.data);
     })
     .catch(error => {
       console.log(error);
