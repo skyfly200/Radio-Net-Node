@@ -1,18 +1,18 @@
 <template lang="pug">
 v-container
-  v-layout.home
+  v-layout.events
     v-flex(lg10 offset-lg1)
-      Controls
+      EventList
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Controls from "@/components/Controls.vue"; // @ is an alias to /src
+import EventList from "@/components/Events.vue"; // @ is an alias to /src
 
 @Component({
   components: {
-    Controls
+    EventList
   }
 })
-export default class Home extends Vue {}
+export default class Events extends Vue {}
 </script>

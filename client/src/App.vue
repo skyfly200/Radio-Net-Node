@@ -4,8 +4,9 @@
       <v-toolbar-title class="headline">Radio Net Node</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn to="/" flat>Home</v-btn>
-        <v-btn to="/about" flat>About</v-btn>
+        <v-btn to="/" flat>Dashboard</v-btn>
+        <v-btn to="/history" flat>History</v-btn>
+        <v-btn to="/events" flat>Events</v-btn>
       </v-toolbar-items>
     </v-toolbar>
 

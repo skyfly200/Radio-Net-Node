@@ -1,27 +1,29 @@
 <template lang="pug">
   .controls
     h1 Radio DJ Controls
-    v-toolbar
-        v-toolbar-title Now Playing: {{ '' }}
+    v-toolbar(extended)
+        v-toolbar-title Now Playing: {{ nowPlaying }}
         v-spacer
         v-toolbar-items.playback-controls
             v-btn(@click='pause(0)' icon flat)
                 v-icon play_arrow
             v-btn(@click='pause(1)' icon flat)
                 v-icon pause
+            v-btn(@click='stop()' icon flat)
+                v-icon stop
             v-btn(@click='restart()' icon flat)
                 v-icon replay
             v-btn(@click='next()' icon flat)
                 v-icon skip_next
-            v-btn(@click='stop()' icon flat)
-                v-icon stop
             v-btn(@click='clear()' icon flat)
                 v-icon clear
-    .queue
-        #queue_table
-    .stream-controls
-        v-select(:items="['test']" label="Stream")#stream_selector
-        v-btn(@click='loadStream()') Load Stream
+        template(v-slot:extension)
+            .stream-controls
+                #stream-selector
+                    v-select(:items="['test']" label="Stream")
+                v-btn(@click='loadStream()')
+                    v-icon(left) radio
+                    | Launch
 </template>
 
 <script lang="ts">
@@ -32,6 +34,8 @@ import { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile,
     methods: { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType }
 })
 export default class Controls extends Vue {
+    nowPlaying = '';
+
     mounted() {
         // get current track and display
         displayCurrent('#current_info_string', () => {});
@@ -74,4 +78,13 @@ export default class Controls extends Vue {
 .controls
     display: flex
     flex-direction: column
+    .stream-controls
+        width: 100%
+        display: flex
+        padding: 1em 0
+        #stream-selector
+            width: 100%
+            margin-right: 1em
+        button
+            margin: auto 1em
 </style>
