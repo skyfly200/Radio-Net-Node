@@ -1,7 +1,8 @@
-<template>
-  <div class="home">
-    <Controls/>
-  </div>
+<template lang="pug">
+v-container
+  v-layout.home
+    v-flex(lg10 offset-lg1)
+      Controls
 </template>
 
 <script lang="ts">
