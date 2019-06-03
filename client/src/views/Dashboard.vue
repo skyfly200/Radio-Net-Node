@@ -22,5 +22,7 @@ export default class Dashboard extends Vue {}
 </script>
 <style lang="sass" scoped>
   .dashboard
-
+    justify-content: center
+    .flex
+      width: 100%
 </style>
