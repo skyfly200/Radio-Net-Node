@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const express = require("express");
 const moment = require('moment');
+var cors = require('cors');
 const env = require('dotenv').config();
 const axios = require('axios');
 const parseString = require('xml2js').parseString;
@@ -8,6 +9,7 @@ const fs = require('fs');
 
 // express init and config
 var app = express();
+app.use(cors());
 var port = process.env.PORT || 8080;
 
 // log file path

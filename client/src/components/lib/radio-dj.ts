@@ -1,3 +1,5 @@
+import Axios from 'axios';
+
 // default empty callback
 function c() {}
 
@@ -10,8 +12,11 @@ function sendControl(command: String, arg: any, callback: Function) {
     arg = arg !== undefined ? arg : '';
     callback = callback !== undefined ? callback : c;
 
-    // console.log(command, arg);
-    //$.get("/opt", { command: command, arg: arg }, callback);
+    console.log(command, arg);
+    Axios.get("localhost:8080/opt", {
+        params: { command: command, arg: arg }
+    })
+    .then();
 }
 
 export function loadFile(id: Number) {

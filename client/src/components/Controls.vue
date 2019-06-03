@@ -1,28 +1,36 @@
 <template lang="pug">
   .controls
     h1 Radio DJ Controls
-    #current_info
-        h3 Now Playing: 
-            span #current_info_string
-    .playback-controls
-        button(onclick='pause(0)') Play
-        button(onclick='pause(1)') Pause
-        button(onclick='restart()') Restart
-        button(onclick='next()') Next
-        button(onclick='stop()') Stop
-        button(onclick='clear()') Clear Playlist
+    v-toolbar
+        v-toolbar-title Now Playing: {{ '' }}
+        v-spacer
+        v-toolbar-items.playback-controls
+            v-btn(@click='pause(0)' icon flat)
+                v-icon play_arrow
+            v-btn(@click='pause(1)' icon flat)
+                v-icon pause
+            v-btn(@click='restart()' icon flat)
+                v-icon replay
+            v-btn(@click='next()' icon flat)
+                v-icon skip_next
+            v-btn(@click='stop()' icon flat)
+                v-icon stop
+            v-btn(@click='clear()' icon flat)
+                v-icon clear
     .queue
         #queue_table
     .stream-controls
-        select()#stream_selector
-        button(onclick='loadStream()') Load Stream
+        v-select(:items="['test']" label="Stream")#stream_selector
+        v-btn(@click='loadStream()') Load Stream
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType } from "./lib/radio-dj";
 
-@Component({})
+@Component({
+    methods: { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType }
+})
 export default class Controls extends Vue {
     mounted() {
         // get current track and display
