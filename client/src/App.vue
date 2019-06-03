@@ -1,10 +1,12 @@
 <template>
   <v-app>
-    <v-toolbar app compact>
+    <v-toolbar app dense>
       <v-toolbar-title class="headline">Radio Net Node</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn to="/" flat>Home</v-btn>
-      <v-btn to="/about" flat>About</v-btn>
+      <v-toolbar-items>
+        <v-btn to="/" flat>Home</v-btn>
+        <v-btn to="/about" flat>About</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
 
     <v-content>
