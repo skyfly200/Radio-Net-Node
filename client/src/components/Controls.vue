@@ -20,56 +20,30 @@
         template(v-slot:extension)
             .stream-controls
                 #stream-selector
-                    v-select(:items="['test']" label="Stream")
+                    v-select(:items="streams" label="Stream")
                 v-btn(@click='loadStream()')
                     v-icon(left) radio
                     | Launch
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType } from "./lib/radio-dj";
 
 @Component({
     methods: { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType }
 })
 export default class Controls extends Vue {
-    nowPlaying = '';
+    @Prop({default: ''})
+    nowPlaying: string;
+    @Prop({default: ['none']})
+    streams: Array<String>;
 
     mounted() {
-        // get current track and display
-        displayCurrent('#current_info_string', () => {});
-
-        // update current song title and queue every n seconds
-        var interval = 1000;
-        setInterval(this.updateDisplay, interval);
-
-        // get streams and draw select
-        // songsByType(5, function (resp: any, stat: any){
-        //     console.log(resp);
-        //     // $.each(resp, function( index, value ) {
-        //     //     $('#stream_selector').append('<option value="' + value.ID + '">' + value.title + '</option>');
-        //     // });
-        // });
     };
 
     loadStream() {
-        //loadFile($( "#stream_selector" ).val());
-    }
-
-    drawChart() {
-        playQueue(function (resp: any, stat: any) {
-            // $.each(resp, function (i, x) {
-            //     data.addRow([x.artist, x.title]);
-            //     if (options.height + itemHeight <= heightMax) {
-            //         options.height += itemHeight;
-            //     }
-            // });
-        });
-    }
-
-    updateDisplay() {
-        displayCurrent('#current_info_string', this.drawChart);
+        // launch the selected stream
     }
 }
 </script>

@@ -8,11 +8,11 @@
             td(class="text-xs-right") {{ props.item.album }}
             td(class="text-xs-right") {{ props.item.genera }}
             td(class="text-xs-right") {{ props.item.date }}
-            td(class="text-xs-right") {{ props.item.duration }}
+            td(class="text-xs-right") {{ formatDuration(props.item.duration) }}
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class Queue extends Vue {
@@ -26,33 +26,17 @@ export default class Queue extends Vue {
         { text: 'Album', value: 'album' },
         { text: 'Genera', value: 'genera' },
         { text: 'Release Date', value: 'date' },
-        { text: 'Duration', value: 'duration' }
+        { text: 'Duration (M:S)', value: 'duration' }
     ];
-    queue = [
-        {
-            title: 'Willy The Pimp',
-            artist: 'Frank Zappa',
-            album: 'Hot Rats',
-            genera: 'Classic rock',
-            date: new Date('October 10, 1969'),
-            duration: 183.54
-        },
-        {
-            title: 'Money',
-            artist: 'Pink Floyd',
-            album: 'Dark Side of the Moon',
-            genera: 'Classic Rock',
-            date: new Date('March 1, 1973'),
-            duration: 183.54
-        },
-        {
-            title: 'Dont mean a thing',
-            artist: 'Ella Fitzgerald',
-            album: 'The Classics',
-            genera: 'Swing',
-            date: new Date('2001'),
-            duration: 183.54
-        }
-    ];
+    @Prop({default: []})
+    queue: Array<Object>;
+
+    formatDuration(d: number) {
+        return `${ Math.trunc(d / 60) }:${ (d % 60).toFixed(2) }`;
+    }
+
+    playItem() {
+        // play item in queue
+    }
 }
 </script>
