@@ -28,14 +28,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType } from "./lib/radio-dj";
+import { pause, restart, next, stop, clear, loadFile } from "./lib/radio-dj";
 
 @Component({
     props: {
         nowPlaying: Object,
         streams: Array
     },
-    methods: { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType }
+    methods: { pause, restart, next, stop, clear, loadFile }
 })
 export default class Controls extends Vue {
     loadStream() {
