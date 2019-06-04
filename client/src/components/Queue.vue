@@ -6,10 +6,9 @@
             td {{ props.item.Title }}
             td(class="text-xs-right") {{ props.item.Artist }}
             td(class="text-xs-right") {{ props.item.Album }}
-            td(class="text-xs-right") {{ props.item.IDGenera }}
+            td(class="text-xs-right") {{ formatDuration(props.item.Duration) }}
             td(class="text-xs-right") {{ props.item.DatePlayed }}
             td(class="text-xs-right") {{ props.item.Year }}
-            td(class="text-xs-right") {{ formatDuration(props.item.Duration) }}
 </template>
 
 <script lang="ts">
@@ -29,10 +28,9 @@ export default class Queue extends Vue {
         },
         { text: 'Artist', value: 'Artist' },
         { text: 'Album', value: 'Album' },
-        { text: 'Genera', value: 'IDGenera' },
+        { text: 'Duration', value: 'Duration' },
         { text: 'Last Played', value: 'DatePlayed' },
-        { text: 'Released', value: 'Year' },
-        { text: 'Duration (M:S)', value: 'Duration' }
+        { text: 'Released', value: 'Year' }
     ];
 
     formatDuration(d: number) {

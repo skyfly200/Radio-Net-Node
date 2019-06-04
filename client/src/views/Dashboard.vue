@@ -25,14 +25,16 @@ export default class Dashboard extends Vue {
 
   created() {
     // init now playing and playlist
-    this.getQueue();
+    this.getNP();
+    setInterval(function () {
+      (this as any).getNP();
+    }.bind(this), 1000); 
 
     // get streams
   }
-  getQueue() {
+  getNP() {
     (this as any).$http.get("/npjson")
     .then((body: any) => {
-      console.log(body.data);
       this.current = body.data.CurrentTrack;
       this.queue = body.data.Playlist;
     });
