@@ -9,7 +9,7 @@ import axios from 'axios';
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
 
-new Vue({
+var app = new Vue({
   router,
   store,
   render: h => h(App)

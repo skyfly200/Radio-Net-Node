@@ -2,7 +2,7 @@
   .controls
     h1 Radio DJ Controls
     v-toolbar(extended)
-        v-toolbar-title Now Playing: {{ nowPlaying }}
+        v-toolbar-title Now Playing: {{ nowPlaying.Title }}
         v-spacer
         v-toolbar-items.playback-controls
             v-btn(@click='pause(0)' icon flat)
@@ -31,17 +31,13 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType } from "./lib/radio-dj";
 
 @Component({
+    props: {
+        nowPlaying: Object,
+        streams: Array
+    },
     methods: { pause, restart, next, stop, clear, displayCurrent, playQueue, loadFile, songsByType }
 })
 export default class Controls extends Vue {
-    @Prop({default: ''})
-    nowPlaying: string;
-    @Prop({default: ['none']})
-    streams: Array<String>;
-
-    mounted() {
-    };
-
     loadStream() {
         // launch the selected stream
     }
