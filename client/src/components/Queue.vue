@@ -1,6 +1,6 @@
 <template lang="pug">
 .queue
-    h1 Player Queue
+    h2 Playlist
     v-data-table(:headers="headers" :items="queue" :total-items="queue.length" hide-actions)
         template(v-slot:items="props")
             td {{ props.item.Title }}

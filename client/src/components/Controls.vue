@@ -1,6 +1,6 @@
 <template lang="pug">
   .controls
-    h1 Radio DJ Controls
+    h1 Controls
     v-toolbar(extended)
         v-toolbar-title Now Playing: {{ nowPlaying.Title }}
         v-spacer
