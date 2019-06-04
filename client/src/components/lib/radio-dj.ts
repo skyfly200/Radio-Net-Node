@@ -20,6 +20,14 @@ export function loadFile(id: Number) {
     sendControl('LoadTrackToTop', id, next);
 }
 
+export function playItem(index: Number) {
+    sendControl('PlayPlaylistTrack', index, next);
+}
+
+export function removeItem(index: Number) {
+    sendControl('RemovePlaylistTrack', index, next);
+}
+
 // simple control functions
 export function restart() {
     sendControl('RestartPlayer', '', c);
