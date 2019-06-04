@@ -21,7 +21,9 @@ import Queue from "@/components/Queue.vue"; // @ is an alias to /src
 export default class Dashboard extends Vue {
   current: object = {};
   queue: Array<object> = [{}];
-  streams: Array<string> = ['test 1', 'test 2'];
+  streams: Array<object> = [
+    {text: 'Way High Radio', value: 96}
+  ];
 
   created() {
     // init now playing and playlist

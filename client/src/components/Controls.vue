@@ -20,8 +20,8 @@
         template(v-slot:extension)
             .stream-controls
                 #stream-selector
-                    v-select(:items="streams" label="Stream")
-                v-btn(@click='loadStream()')
+                    v-select(:items="streams" v-model="stream" label="Stream")
+                v-btn(@click='launchStream()')
                     v-icon(left) radio
                     | Launch
 </template>
@@ -35,11 +35,17 @@ import { pause, restart, next, stop, clear, loadFile } from "./lib/radio-dj";
         nowPlaying: Object,
         streams: Array
     },
-    methods: { pause, restart, next, stop, clear, loadFile }
+    methods: { pause, restart, next, stop, clear }
 })
 export default class Controls extends Vue {
-    loadStream() {
-        // launch the selected stream
+    stream: any = '';
+
+    launchStream() {
+        if (typeof this.stream === 'number') {
+            // launch the selected stream
+            loadFile(this.stream);
+            next();
+        }
     }
 }
 </script>
