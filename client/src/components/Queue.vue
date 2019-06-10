@@ -7,7 +7,7 @@
             td(class="text-xs-right") {{ props.item.Artist }}
             td(class="text-xs-right") {{ props.item.Album }}
             td(class="text-xs-right") {{ formatDuration(props.item.Duration) }}
-            td(class="text-xs-right") {{ props.item.DatePlayed }}
+            td(class="text-xs-right") {{ distanceInWordsToNow(props.item.DatePlayed) }} ago
             td(class="text-xs-right") {{ props.item.Year }}
             td.justify-center.layout.px-0
                 v-icon.mr-2(@click="playItem(props.index)") play_arrow
@@ -17,12 +17,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { next, playItem, removeItem } from "./lib/radio-dj";
+import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
 @Component({
     props: {
         queue: Array
     },
-    methods: { next, playItem, removeItem }
+    methods: { next, playItem, removeItem, distanceInWordsToNow }
 })
 export default class Queue extends Vue {
     headers = [
