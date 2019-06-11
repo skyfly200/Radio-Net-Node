@@ -13,9 +13,6 @@ router.get('/', function(req, res, next) {
 
 // ------ SQL DatabaseSQL  ------
 
-// titles of event run types
-var event_run_types = ['No Repeat', 'Repeat by Day', 'Repeat by Day and Hour', 'Manual Event', 'Start-up Event'];
-
 // Data Base Connection Pool
 var pool = mysql.createPool({
   connectionLimit: 100, //important
@@ -28,23 +25,86 @@ var pool = mysql.createPool({
 
 // SQL Query List
 var querys = {
-  "events": "SELECT e.ID, e.name, e.type, e.time, e.date, e.day, e.hours, e.enabled, c.name as category from events as e LEFT JOIN events_categories as c on e.catID=c.ID",
-  "event_get": "SELECT e.ID, e.name, e.type, e.time, e.date, e.day, e.hours, e.data, e.enabled, e.catID, c.name as category from events as e LEFT JOIN events_categories as c on e.catID=c.ID WHERE e.ID=?",
-  "event_new": "INSERT INTO events (name,type,date,time,day,hours,data,enabled,catID) VALUES(?,?,?,?,?,?,?,?,?)",
-  "event_update": "UPDATE events SET name=?,type=?,date=?,time=?,day=?,hours=?,data=?,enabled=?,catID=? WHERE ID=?",
-  "event_delete": "DELETE FROM events WHERE ID=?",
-  "event_categories": "SELECT * from events_categories",
-  "queue": "SELECT queuelist.id, queuelist.artist, songs.title, songs.duration from queuelist left join songs on queuelist.songID=songs.ID",
-  "history": "SELECT date_played, artist, album, title from history ORDER BY date_played DESC",
-  "current": "SELECT date_played, artist, album, title from history ORDER BY date_played DESC LIMIT 1",
-  "songs": "SELECT * FROM songs LIMIT 100",
-  "song_id": "SELECT * FROM songs WHERE ID =?",
-  "song_type": "SELECT * FROM songs WHERE song_type = ?",
-  "song_subcat": "SELECT * FROM songs WHERE id_subcat = ?"
+  "events": {
+    template: "SELECT e.ID, e.name, e.type, e.time, e.date, e.day, e.hours, e.enabled, c.name as category from events as e LEFT JOIN events_categories as c on e.catID=c.ID",
+    params: []
+  },
+  "event_get": {
+    template: "SELECT e.ID, e.name, e.type, e.time, e.date, e.day, e.hours, e.data, e.enabled, e.catID, c.name as category from events as e LEFT JOIN events_categories as c on e.catID=c.ID WHERE e.ID=?",
+    params: [ { key: "id", type: Number } ]
+  },
+  "event_new": {
+    template: "INSERT INTO events (name,type,date,time,day,hours,data,enabled,catID) VALUES(?,?,?,?,?,?,?,?,?)",
+    params: [ 
+      { key: "name", type: String },
+      { key: "type", type: String },
+      { key: "date", type: String },
+      { key: "time", type: String },
+      { key: "day", type: String },
+      { key: "hours", type: String },
+      { key: "data", type: String },
+      { key: "enabled", type: String },
+      { key: "catID", type: String }
+    ]
+  },
+  "event_update": {
+    template: "UPDATE events SET name=?,type=?,date=?,time=?,day=?,hours=?,data=?,enabled=?,catID=? WHERE ID=?",
+    params: [
+      { key: "name", type: String },
+      { key: "type", type: String },
+      { key: "date", type: String },
+      { key: "time", type: String },
+      { key: "day", type: String },
+      { key: "hours", type: String },
+      { key: "data", type: String },
+      { key: "enabled", type: String },
+      { key: "catID", type: String },
+      { key: "id", type: Number }
+    ]
+  },
+  "event_delete": {
+    template: "DELETE FROM events WHERE ID = ?",
+    params: [ { key: "id", type: Number } ]
+  },
+  "event_categories": {
+    template: "SELECT * from events_categories",
+    params: []
+  },
+  "queue": {
+    template: "SELECT queuelist.id, queuelist.artist, songs.title, songs.duration from queuelist left join songs on queuelist.songID=songs.ID",
+    params: []
+  },
+  "history": {
+    template: "SELECT date_played, artist, album, title from history ORDER BY date_played DESC",
+    params: []
+  },
+  "current": {
+    template: "SELECT date_played, artist, album, title from history ORDER BY date_played DESC LIMIT 1",
+    params: []
+  },
+  "songs": {
+    template: "SELECT * FROM songs WHERE ID >= ? LIMIT 100",
+    params: [ {key: "id", type: Number} ]
+  },
+  "song_id": {
+    template: "SELECT * FROM songs WHERE ID = ?",
+    params: [ { key: "id", type: Number } ]
+  },
+  "song_type": {
+    template: "SELECT * FROM songs WHERE song_type = ?",
+    params: [ { key: "song_type", type: String } ]
+  },
+  "song_subcat": {
+    template: "SELECT * FROM songs WHERE id_subcat = ?",
+    params: [ { key: "id_subcat", type: String } ]
+  },
 };
 
+// titles of event run types
+var event_run_types = ['No Repeat', 'Repeat by Day', 'Repeat by Day and Hour', 'Manual Event', 'Start-up Event'];
+
 // run a query
-function queryDatabase(queryID, args, callback) {
+function queryDatabase(queryParams, callback) {
 
   pool.getConnection(function (err, connection) {
     if (err) {
@@ -53,15 +113,19 @@ function queryDatabase(queryID, args, callback) {
       return;
     }
 
-    query = querys[queryID];
-    query = args !== [] ? mysql.format(query, args) : query;
+    var query = querys[queryParams.q];
+
+    var args = query.params.map(v => v.type(queryParams[v.key]));
+    console.log(args)
+
+    var queryFormated = mysql.format(query.template, args);
     //console.log(query);
 
-    connection.query(query, function (err, rows) {
+    connection.query(queryFormated, function (err, rows) {
       connection.release();
       if (!err) {
         callback(rows);
-      } else { } //console.log(err); }
+      } else { console.error(err); }
     });
 
     connection.on('error', function (err) {
@@ -74,11 +138,8 @@ function queryDatabase(queryID, args, callback) {
 // -- API Routing
 
 router.get("/query", function (req, res) {
-  var query = req.query.q;
-  if (typeof query === 'undefined') return res.send("Incorect query (q) parameter: " + query);
-  var arg = req.query.arg;
-  var args = typeof arg == Array ? arg : [arg];
-  queryDatabase(query, args, function (data) {
+  if (typeof req.query.q === 'undefined') return res.send("Incorect query (q) parameter: " + query);
+  queryDatabase(req.query, function (data) {
     res.json(data);
   });
 });
@@ -121,7 +182,6 @@ router.get("/event-form", function (req, res) {
     });
   });
 });
-
 
 // name,type,date,time,day,hours,data,enabled,catID
 
