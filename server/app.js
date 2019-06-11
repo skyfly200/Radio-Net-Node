@@ -9,6 +9,9 @@ var radiodjRouter = require('./routes/radiodj');
 var dbRouter = require('./routes/db');
 var usersRouter = require('./routes/users');
 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var app = express();
 
 // view engine setup
@@ -26,6 +29,13 @@ app.use('/users', usersRouter);
 app.use('/db', dbRouter);
 app.use('/radiodj', radiodjRouter);
 
+// login handler
+app.post('/login',
+  passport.authenticate('local', { failureRedirect: '/error' }),
+  function (req, res) {
+    res.redirect('/success?username=' + req.user.username);
+  });
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -41,5 +51,39 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+/*  PASSPORT SETUP  */
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/success', (req, res) => res.send("Welcome " + req.query.username + "!!"));
+app.get('/error', (req, res) => res.send("error logging in"));
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function (id, cb) {
+  User.findById(id, function (err, user) {
+    cb(err, user);
+  });
+});
+
+/* PASSPORT LOCAL AUTHENTICATION */
+passport.use(new LocalStrategy(
+  function (username, password, done) {
+    var user = {
+      username: "admin",
+      password: "pass"
+    };
+    if (!username || username !== user.username) {
+      return done(null, false);
+    }
+    if (password !== user.password) {
+      return done(null, false);
+    }
+    return done(null, true);
+  }
+));
 
 module.exports = app;
