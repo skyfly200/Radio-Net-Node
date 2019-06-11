@@ -18,7 +18,7 @@
             td {{ props.item.year }}
             td {{ props.item["count_played"] }}
             td.justify-center.layout.px-0
-                v-icon.mr-2(@click="loadFile(props.item.ID)") play_arrow
+                v-icon.mr-2(@click="play(props.item.ID)") play_arrow
         template(v-slot:no-results)
             v-alert(:value="true" color="error" icon="warning") Your search for "{{ search }}" found no results.
 </template>
@@ -26,11 +26,11 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
-import { loadFile } from "./lib/radio-dj";
+import { loadFile, next } from "./lib/radio-dj";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
 @Component({
-    methods: { loadFile, distanceInWordsToNow }
+    methods: { loadFile, next, distanceInWordsToNow }
 })
 export default class Songs extends Vue {
     songs = [];
@@ -53,6 +53,11 @@ export default class Songs extends Vue {
         setInterval(function () {
             (this as any).getSongs();
             }.bind(this), 1000);
+    }
+
+    play(id: number) {
+        loadFile(id);
+        next;
     }
 
     getSongs() {

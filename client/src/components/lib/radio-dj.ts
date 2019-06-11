@@ -13,7 +13,7 @@ function sendControl(command: String, arg: any, callback: Function) {
     Axios.get("/opt", {
         params: { command: command, arg: arg }
     })
-    .then();
+    .then( resp => callback(resp) );
 }
 
 export function loadFile(id: Number) {
