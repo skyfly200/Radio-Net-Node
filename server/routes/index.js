@@ -29,9 +29,9 @@ var querys = {
     template: "SELECT e.ID, e.name, e.type, e.time, e.date, e.day, e.hours, e.enabled, c.name as category from events as e LEFT JOIN events_categories as c on e.catID=c.ID",
     params: []
   },
-  "event_get": {
+  "event": {
     template: "SELECT e.ID, e.name, e.type, e.time, e.date, e.day, e.hours, e.data, e.enabled, e.catID, c.name as category from events as e LEFT JOIN events_categories as c on e.catID=c.ID WHERE e.ID=?",
-    params: [ { key: "id", type: Number } ]
+    params: [ { key: "id", type: Number, default: 1 } ]
   },
   "event_new": {
     template: "INSERT INTO events (name,type,date,time,day,hours,data,enabled,catID) VALUES(?,?,?,?,?,?,?,?,?)",
@@ -44,7 +44,7 @@ var querys = {
       { key: "hours", type: String },
       { key: "data", type: String },
       { key: "enabled", type: String },
-      { key: "catID", type: String }
+      { key: "catID", type: Number }
     ]
   },
   "event_update": {
@@ -58,7 +58,7 @@ var querys = {
       { key: "hours", type: String },
       { key: "data", type: String },
       { key: "enabled", type: String },
-      { key: "catID", type: String },
+      { key: "catID", type: Number },
       { key: "id", type: Number }
     ]
   },
@@ -84,19 +84,19 @@ var querys = {
   },
   "songs": {
     template: "SELECT * FROM songs WHERE ID >= ? LIMIT 100",
-    params: [ {key: "id", type: Number, default: 0} ]
+    params: [ {key: "id", type: Number, default: 1} ]
   },
   "song_id": {
     template: "SELECT * FROM songs WHERE ID = ?",
-    params: [ { key: "id", type: Number } ]
+    params: [ { key: "id", type: Number, default: 1 } ]
   },
   "song_type": {
     template: "SELECT * FROM songs WHERE song_type = ?",
-    params: [ { key: "song_type", type: String } ]
+    params: [ { key: "type", type: Number, default: 0 } ]
   },
   "song_subcat": {
     template: "SELECT * FROM songs WHERE id_subcat = ?",
-    params: [ { key: "id_subcat", type: String } ]
+    params: [ { key: "subcat", type: Number, default: 0 } ]
   },
 };
 
@@ -119,10 +119,10 @@ function queryDatabase(queryParams, callback) {
       var value = queryParams[v.key] ? queryParams[v.key] : (v.default ? v.default : null);
       return v.type(value);
     });
-    //console.log(args)
+    console.log(args)
 
     var queryFormated = mysql.format(query.template, args);
-    //console.log(query);
+    console.log(queryFormated);
 
     connection.query(queryFormated, function (err, rows) {
       connection.release();
