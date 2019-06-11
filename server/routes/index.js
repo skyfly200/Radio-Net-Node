@@ -7,7 +7,7 @@ var parseString = require('xml2js').parseString;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
 
@@ -84,7 +84,7 @@ var querys = {
   },
   "songs": {
     template: "SELECT * FROM songs WHERE ID >= ? LIMIT 100",
-    params: [ {key: "id", type: Number} ]
+    params: [ {key: "id", type: Number, default: 0} ]
   },
   "song_id": {
     template: "SELECT * FROM songs WHERE ID = ?",
@@ -115,8 +115,11 @@ function queryDatabase(queryParams, callback) {
 
     var query = querys[queryParams.q];
 
-    var args = query.params.map(v => v.type(queryParams[v.key]));
-    console.log(args)
+    var args = query.params.map(v => {
+      var value = queryParams[v.key] ? queryParams[v.key] : (v.default ? v.default : null);
+      return v.type(value);
+    });
+    //console.log(args)
 
     var queryFormated = mysql.format(query.template, args);
     //console.log(query);
