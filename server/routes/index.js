@@ -83,7 +83,7 @@ var querys = {
     params: []
   },
   "songs": {
-    template: "SELECT * FROM songs WHERE ID >= ? LIMIT 100",
+    template: "SELECT * FROM songs WHERE ID >= ?",
     params: [ {key: "id", type: Number, default: 1} ]
   },
   "song_id": {
