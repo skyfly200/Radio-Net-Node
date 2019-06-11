@@ -10,7 +10,7 @@ function sendControl(command: String, arg: any, callback: Function) {
     callback = callback !== undefined ? callback : c;
 
     // console.log(command, arg);
-    Axios.get("/opt", {
+    Axios.get("/radiodj/opt", {
         params: { command: command, arg: arg }
     })
     .then( resp => callback(resp) );

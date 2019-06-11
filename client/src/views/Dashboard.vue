@@ -35,7 +35,7 @@ export default class Dashboard extends Vue {
     // get streams
   }
   getNP() {
-    (this as any).$http.get("/npjson")
+    (this as any).$http.get("/radiodj/npjson")
     .then((body: any) => {
       this.current = body.data.CurrentTrack;
       this.queue = body.data.Playlist;
