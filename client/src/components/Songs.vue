@@ -1,7 +1,13 @@
 <template lang="pug">
 .history
     h2 Library
-    v-data-table(:headers="headers" :items="songs")
+    v-text-field(
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details)
+    v-data-table(:headers="headers" :items="songs" :search="search")
         template(v-slot:items="props")
             td {{ props.item.ID }}
             td {{ props.item.title }}
@@ -13,6 +19,8 @@
             td {{ props.item["count_played"] }}
             td.justify-center.layout.px-0
                 v-icon.mr-2(@click="loadFile(props.item.ID)") play_arrow
+        template(v-slot:no-results)
+            v-alert(:value="true" color="error" icon="warning") Your search for "{{ search }}" found no results.
 </template>
 
 <script lang="ts">
@@ -26,6 +34,7 @@ import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 })
 export default class Songs extends Vue {
     songs = [];
+    search = "";
     page = 0;
     headers = [
         { text: 'ID', align: 'left', value: 'ID', sortable: false },
