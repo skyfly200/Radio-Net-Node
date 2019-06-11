@@ -61,7 +61,7 @@ export default class Songs extends Vue {
     }
 
     getSongs() {
-        (this as any).$http.get(`/query?q=songs&id=${this.page * 100 + 1}`)
+        (this as any).$http.get(`/db/query?q=songs&id=${this.page * 100 + 1}`)
         .then((body: any) => {
             this.songs = body.data;
         });

@@ -39,7 +39,7 @@ export default class History extends Vue {
     }
 
     getHistory() {
-        (this as any).$http.get("/query?q=history")
+        (this as any).$http.get("/db/query?q=history")
         .then((body: any) => {
             this.history = body.data;
         });

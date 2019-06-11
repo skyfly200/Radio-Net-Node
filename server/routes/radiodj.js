@@ -3,8 +3,6 @@ var express = require('express');
 var router = express.Router();
 var env = require('dotenv').config();
 var axios = require('axios');
-var parseString = require('xml2js').parseString;
-
 
 // ---- RadioDJ REST API Proxy ----
 

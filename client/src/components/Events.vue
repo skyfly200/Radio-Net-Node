@@ -45,7 +45,7 @@ export default class Events extends Vue {
     }
 
     getEvents() {
-        (this as any).$http.get("/query?q=events")
+        (this as any).$http.get("/db/query?q=events")
         .then((body: any) => {
             this.events = body.data;
         });
