@@ -13,8 +13,8 @@
             td {{ props.item.enabled }}
             td {{ props.item.catagory }}
             td.justify-center.layout.px-0
-                v-icon.mr-2(@click="playItem(props.index)") edit
-                v-icon(@click="removeItem(props.index)") delete
+                v-icon.mr-2(@click="") edit
+                v-icon(@click="") delete
 </template>
 
 <script lang="ts">
@@ -25,10 +25,7 @@ import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
     methods: { distanceInWordsToNow }
 })
 export default class Events extends Vue {
-    events = [
-        {"ID":3,"name":"Test","type":0,"time":"22:02:22","date":"2019-06-10T06:00:00.000Z","day":"&","hours":"&","enabled":"True","category":"Default"},
-        {"ID":4,"name":"Test 2","type":1,"time":"22:02:35","date":"2002-01-01T07:00:00.000Z","day":"&1&2&3&4&5&6&0","hours":"&","enabled":"True","category":"Default"}
-        ];
+    events = [];
     headers = [
         { text: 'ID', value: 'ID', align: 'left', sortable: false },
         { text: 'Name', value: 'name', sortable: false },
@@ -39,5 +36,20 @@ export default class Events extends Vue {
         { text: 'Hours', value: 'hours', sortable: false },
         { text: 'Catagory', value: 'catagory', sortable: false }
     ];
+
+    created() {
+        // init now playing and playlist
+        this.getEvents();
+        setInterval(function () {
+            (this as any).getEvents();
+            }.bind(this), 1000);
+    }
+
+    getEvents() {
+        (this as any).$http.get("/query?q=events")
+        .then((body: any) => {
+            this.events = body.data;
+        });
+    }
 }
 </script>

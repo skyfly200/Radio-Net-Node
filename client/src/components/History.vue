@@ -29,5 +29,20 @@ export default class History extends Vue {
         { text: 'Artist', value: 'Artist', sortable: false },
         { text: 'Album', value: 'Album', sortable: false }
     ];
+
+    created() {
+        // init now playing and playlist
+        this.getHistory();
+        setInterval(function () {
+            (this as any).getHistory();
+            }.bind(this), 1000);
+    }
+
+    getHistory() {
+        (this as any).$http.get("/query?q=history")
+        .then((body: any) => {
+            this.history = body.data;
+        });
+    }
 }
 </script>
