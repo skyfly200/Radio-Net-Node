@@ -16,10 +16,10 @@ router.get('/', function(req, res, next) {
 // Data Base Connection Pool
 var pool = mysql.createPool({
   connectionLimit: 100, //important
-  host: 'localhost',
-  user: 'root',
-  password: 'Prism1984',
-  database: 'radiodj2',
+  host: process.env.SQL_HOST || 'localhost',
+  user: process.env.SQL_USER || 'root',
+  password: process.env.SQL_PASSWORD || 'password',
+  database: process.env.SQL_DATABASE || 'radiodj',
   debug: false
 });
 
