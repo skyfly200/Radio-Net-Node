@@ -4,11 +4,11 @@
     v-data-table(:headers="headers" :items="queue" :total-items="queue.length" hide-actions)
         template(v-slot:items="props")
             td {{ props.item.Title }}
-            td(class="text-xs-right") {{ props.item.Artist }}
-            td(class="text-xs-right") {{ props.item.Album }}
-            td(class="text-xs-right") {{ formatDuration(props.item.Duration) }}
-            td(class="text-xs-right") {{ distanceInWordsToNow(props.item.DatePlayed) }} ago
-            td(class="text-xs-right") {{ props.item.Year }}
+            td {{ props.item.Artist }}
+            td {{ props.item.Album }}
+            td {{ formatDuration(props.item.Duration) }}
+            td {{ distanceInWordsToNow(props.item.DatePlayed) }} ago
+            td {{ props.item.Year }}
             td.justify-center.layout.px-0
                 v-icon.mr-2(@click="playItem(props.index)") play_arrow
                 v-icon(@click="removeItem(props.index)") close

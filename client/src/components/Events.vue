@@ -10,7 +10,6 @@
             td {{ props.item.date }}
             td {{ props.item.day }}
             td {{ props.item.hours }}
-            td {{ props.item.enabled }}
             td {{ props.item.catagory }}
             td.justify-center.layout.px-0
                 v-icon.mr-2(@click="") edit

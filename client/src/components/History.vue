@@ -17,17 +17,17 @@ import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
     methods: { distanceInWordsToNow }
 })
 export default class History extends Vue {
-    history = [{"date_played":"2019-06-11T03:53:01.000Z","artist":"Mai Yamane","album":"","title":"Tasogare"},{"date_played":"2019-06-11T03:50:05.000Z","artist":"03 Cletus Awreetus","album":"","title":"Awrightus"},{"date_played":"2019-06-11T03:50:00.000Z","artist":"Syd Barrett","album":"Opel","title":"Milky Way"},{"date_played":"2019-06-11T03:49:53.000Z","artist":"Radio Stream","album":"","title":"Way High Studio"}];
+    history = [];
     headers = [
-        { text: 'Played', value: 'DatePlayed', sortable: false },
+        { text: 'Played', value: 'date_played', sortable: false },
         {
             text: 'Title',
             align: 'left',
-            value: 'Title',
+            value: 'title',
             sortable: false
         },
-        { text: 'Artist', value: 'Artist', sortable: false },
-        { text: 'Album', value: 'Album', sortable: false }
+        { text: 'Artist', value: 'artist', sortable: false },
+        { text: 'Album', value: 'album', sortable: false }
     ];
 
     created() {

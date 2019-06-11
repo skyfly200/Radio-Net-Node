@@ -24,6 +24,12 @@ export default new Router({
       name: "events",
       component: () =>
         import(/* webpackChunkName: "events" */ "./views/Events.vue")
+    },
+    {
+      path: "/songs",
+      name: "songs",
+      component: () =>
+        import(/* webpackChunkName: "songs" */ "./views/Songs.vue")
     }
   ]
 });

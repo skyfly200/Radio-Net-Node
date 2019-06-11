@@ -119,7 +119,7 @@ function queryDatabase(queryParams, callback) {
       var value = queryParams[v.key] ? queryParams[v.key] : (v.default ? v.default : null);
       return v.type(value);
     });
-    console.log(args)
+    //console.log(args)
 
     var queryFormated = mysql.format(query.template, args);
     console.log(queryFormated);

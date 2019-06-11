@@ -7,6 +7,7 @@
         <v-btn to="/" flat>Dashboard</v-btn>
         <v-btn to="/history" flat>History</v-btn>
         <v-btn to="/events" flat>Events</v-btn>
+        <v-btn to="/songs" flat>Library</v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
