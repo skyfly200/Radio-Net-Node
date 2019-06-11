@@ -1,7 +1,7 @@
 <template lang="pug">
 .history
     h2 History
-    v-data-table(:headers="headers" :items="history" :total-items="history.length" hide-actions)
+    v-data-table(:headers="headers" :items="history")
         template(v-slot:items="props")
             td {{ distanceInWordsToNow(props.item["date_played"]) }} ago
             td {{ props.item.title }}
