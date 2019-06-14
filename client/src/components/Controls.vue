@@ -7,9 +7,9 @@
                 v-toolbar-title Now Playing: {{ nowPlaying.Title }}
                 v-spacer
                 v-toolbar-items.playback-controls
-                    v-btn(@click='pause(0)' icon flat)
+                    v-btn(@click='pause(0)' icon flat v-if="!status")
                         v-icon play_arrow
-                    v-btn(@click='pause(1)' icon flat)
+                    v-btn(@click='pause(1)' icon flat v-else)
                         v-icon pause
                     v-btn(@click='stop()' icon flat)
                         v-icon stop
@@ -49,6 +49,8 @@ export default class Controls extends Vue {
     nowPlaying: any;
     @Prop({type: Array})
     streams: any;
+    @Prop({type: Boolean})
+    status: any;
 
     get songProgress() {
         let d = this.nowPlaying.Duration;

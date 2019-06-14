@@ -2,7 +2,7 @@
 v-container
   v-layout.dashboard(wrap)
     v-flex.controls.ma-3(sm12 md10 offset-md1)
-      Controls(:nowPlaying="current" :streams="streams")
+      Controls(:nowPlaying="current" :streams="streams" :status="status")
     v-flex.queue.ma-3(sm12 md10 offset-md1)
       Queue(:queue="queue")
 </template>
@@ -21,6 +21,7 @@ import Queue from "@/components/Queue.vue";
 export default class Dashboard extends Vue {
   current: object = {};
   queue: Array<object> = [{}];
+  status: Boolean = false;
   streams: Array<object> = [
     {text: 'Way High Radio', value: 96}
   ];
@@ -37,6 +38,7 @@ export default class Dashboard extends Vue {
   getNP() {
     (this as any).$http.get("/radiodj/npjson")
     .then((body: any) => {
+      this.status = (this.current as any).Position < body.data.CurrentTrack.Position;
       this.current = body.data.CurrentTrack;
       this.queue = body.data.Playlist;
     });
