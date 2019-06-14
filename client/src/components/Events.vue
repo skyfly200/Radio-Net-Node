@@ -39,7 +39,7 @@ export default class Events extends Vue {
     created() {
         // init now playing and playlist
         this.getEvents();
-        setInterval(function () {
+        setInterval(function (this: any) {
             (this as any).getEvents();
             }.bind(this), 1000);
     }

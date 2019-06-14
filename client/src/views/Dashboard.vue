@@ -9,8 +9,8 @@ v-container
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Controls from "@/components/Controls.vue"; // @ is an alias to /src
-import Queue from "@/components/Queue.vue"; // @ is an alias to /src
+import Controls from "@/components/Controls.vue";
+import Queue from "@/components/Queue.vue";
 
 @Component({
   components: {
@@ -28,7 +28,7 @@ export default class Dashboard extends Vue {
   created() {
     // init now playing and playlist
     this.getNP();
-    setInterval(function () {
+    setInterval(function (this: any) {
       (this as any).getNP();
     }.bind(this), 1000); 
 

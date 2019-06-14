@@ -50,7 +50,7 @@ export default class Songs extends Vue {
     created() {
         // init now playing and playlist
         this.getSongs();
-        setInterval(function () {
+        setInterval(function (this: any) {
             (this as any).getSongs();
             }.bind(this), 1000);
     }

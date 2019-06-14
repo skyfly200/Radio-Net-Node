@@ -33,7 +33,7 @@ export default class History extends Vue {
     created() {
         // init now playing and playlist
         this.getHistory();
-        setInterval(function () {
+        setInterval(function (this: any) {
             (this as any).getHistory();
             }.bind(this), 1000);
     }

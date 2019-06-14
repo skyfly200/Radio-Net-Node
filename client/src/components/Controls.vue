@@ -1,23 +1,32 @@
 <template lang="pug">
   .controls
     h1 Controls
-    v-toolbar(extended)
-        v-toolbar-title Now Playing: {{ nowPlaying.Title }}
-        v-spacer
-        v-toolbar-items.playback-controls
-            v-btn(@click='pause(0)' icon flat)
-                v-icon play_arrow
-            v-btn(@click='pause(1)' icon flat)
-                v-icon pause
-            v-btn(@click='stop()' icon flat)
-                v-icon stop
-            v-btn(@click='restart()' icon flat)
-                v-icon replay
-            v-btn(@click='next()' icon flat)
-                v-icon skip_next
-            v-btn(@click='clear()' icon flat)
-                v-icon clear
-        template(v-slot:extension)
+    v-card
+        v-card-text
+            v-toolbar(extended)
+                v-toolbar-title Now Playing: {{ nowPlaying.Title }}
+                v-spacer
+                v-toolbar-items.playback-controls
+                    v-btn(@click='pause(0)' icon flat)
+                        v-icon play_arrow
+                    v-btn(@click='pause(1)' icon flat)
+                        v-icon pause
+                    v-btn(@click='stop()' icon flat)
+                        v-icon stop
+                    v-btn(@click='restart()' icon flat)
+                        v-icon replay
+                    v-btn(@click='next()' icon flat)
+                        v-icon skip_next
+                    v-btn(@click='clear()' icon flat)
+                        v-icon clear
+                template(v-slot:extension)
+                    .playback-info
+                        .track-info
+                            span {{ nowPlaying.Album }} - {{ nowPlaying.Artist }}
+                            v-spacer
+                            span {{ nowPlaying.Duration }}
+                        .progress-bar
+                            v-progress-linear(v-model="songProgress")
             .stream-controls
                 #stream-selector
                     v-select(:items="streams" v-model="stream" label="Stream")
@@ -31,14 +40,21 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { pause, restart, next, stop, clear, loadFile } from "./lib/radio-dj";
 
 @Component({
-    props: {
-        nowPlaying: Object,
-        streams: Array
-    },
     methods: { pause, restart, next, stop, clear }
 })
 export default class Controls extends Vue {
     stream: any = '';
+
+    @Prop({type: Object})
+    nowPlaying: any;
+    @Prop({type: Array})
+    streams: any;
+
+    get songProgress() {
+        let d = this.nowPlaying.Duration;
+        let e = this.nowPlaying.Elapsed;
+        return 100 * ( e / d );
+    }
 
     launchStream() {
         if (typeof this.stream === 'number') {
@@ -63,4 +79,13 @@ export default class Controls extends Vue {
             margin-right: 1em
         button
             margin: auto 1em
+    .playback-info
+        display: flex
+        width: 100%
+        flex-direction: column
+    .track-info
+        display: flex
+        width: 100%
+    .progress-bar
+        width: 100%
 </style>
