@@ -24,7 +24,7 @@
                         .track-info
                             span {{ nowPlaying.Album }} - {{ nowPlaying.Artist }}
                             v-spacer
-                            span {{ formatDuration(nowPlaying.Elapsed) }} | {{ formatDuration(nowPlaying.Duration) }}
+                            span {{ formatDuration(nowPlaying.Elapsed, 0) }} | {{ formatDuration(nowPlaying.Duration, 0) }}
                         .progress-bar
                             v-progress-linear(v-model="songProgress")
             .stream-controls
@@ -64,8 +64,10 @@ export default class Controls extends Vue {
         }
     }
 
-    formatDuration(d: number) {
-        return `${ Math.trunc(d / 60) }:${ (d % 60).toFixed(2) }`;
+    formatDuration(d: number, a: number) {
+        let min = Math.trunc(d / 60);
+        let sec = (d % 60).toFixed(a);
+        return `${ min }:${ sec.length === 1 ? "0" + sec : sec  }`;
     }
 }
 </script>
