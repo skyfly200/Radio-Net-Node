@@ -2,19 +2,22 @@
 v-container
   v-layout.dashboard(wrap)
     v-flex.controls.ma-3(sm12 md10 offset-md1)
-      Controls(:nowPlaying="current" :streams="streams" :status="status")
+      Streams(:nowPlaying="current" :streams="streams" :status="status")
     v-flex.queue.ma-3(sm12 md10 offset-md1)
       Queue(:queue="queue")
+  ControlBar
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Controls from "@/components/Controls.vue";
+import Streams from "@/components/Streams.vue";
+import ControlBar from "@/components/ControlBar.vue";
 import Queue from "@/components/Queue.vue";
 
 @Component({
   components: {
-    Controls,
+    Streams,
+    ControlBar,
     Queue
   },
 })
