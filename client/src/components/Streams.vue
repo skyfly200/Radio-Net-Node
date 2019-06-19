@@ -1,14 +1,12 @@
 <template lang="pug">
   .streams
     h1 Streams
-    v-card
-        v-card-text
-            .stream-controls
-                #stream-selector
-                    v-select(:items="streams" v-model="stream" label="Stream")
-                v-btn(@click='launchStream()')
-                    v-icon(left) radio
-                    | Launch
+    .stream-controls
+        #stream-selector
+            v-select(:items="streams" v-model="stream" label="Stream")
+        v-btn(@click='launchStream()')
+            v-icon(left) radio
+            | Launch
 </template>
 
 <script lang="ts">
