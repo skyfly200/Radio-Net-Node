@@ -1,5 +1,5 @@
 <template lang="pug">
-    v-bottom-nav.controls(app fixed :active.sync="activeBtn")
+    v-bottom-nav.controls(app fixed)
         .progress-bar
             v-progress-linear(v-model="songProgress")
         .player-info
@@ -12,12 +12,11 @@
                 span.hidden-md-and-down &nbsp;| {{ formatDuration(nowPlaying.Duration, 0) }}
         v-toolbar-items.player-controls
             .toggles.ctrls
-                CtrlBtn(icon='pause_circle_outline' @click='' tooltip='Toggle Automated' hide)
-                CtrlBtn(icon='album' @click='' tooltip='Toggle Auto DJ' hide)
+                CtrlBtn(:icon="assisted ? 'music_off' : 'music_note'" @click='toggleAssisted()' :tooltip="assisted ? 'Enable Auto Advance' : 'Disable Auto Advance'" hide)
+                CtrlBtn(:icon="autoDJ ? 'album' : 'queue'" @click='toggleAutoDJ()' :tooltip="autoDJ ? 'Disable Auto DJ' : 'Enable Auto DJ'" hide)
                 CtrlBtn(icon='delete_sweep' @click='clear()' tooltip='Clear Playlist' hide)
             .main-ctrls.ctrls
-                CtrlBtn(icon='play_arrow' @click='pause(0)' tooltip='Play' v-if="!status")
-                CtrlBtn(icon='pause' @click='pause(1)' tooltip='Pause' v-else)
+                CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'" hide)
                 CtrlBtn(icon='skip_next' @click='next()' tooltip='Next Song')
                 CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
                 CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
@@ -28,33 +27,50 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { pause, restart, next, stop, clear, loadFile } from "./lib/radio-dj";
+import { pause, restart, next, stop, clear, loadFile, statusAutoDJ, statusAssisted, setAssisted, setAutoDJ } from "./lib/radio-dj";
 import CtrlBtn from "./CtrlBtn.vue";
 
 @Component({
-    methods: { pause, restart, next, stop, clear },
+    methods: { pause, restart, next, stop, clear, setAssisted, setAutoDJ },
     components: { CtrlBtn }
 })
 export default class ControlBar extends Vue {
     nowPlaying: any = {};
-    status: Boolean = false;
-    activeBtn: number = 2;
+    paused: Boolean = false;
+    assisted: Boolean = false;
+    autoDJ: Boolean = false;
 
     created() {
-        // init now playing and playlist
+        // init now paused and playlist
         this.getNP();
+        // this.assisted = statusAssisted();
+        // this.autoDJ = statusAutoDJ();
         setInterval(function (this: any) {
         (this as any).getNP();
-        }.bind(this), 500); 
-
-        // get streams
+        }.bind(this), 500);
     }
+    
     getNP() {
         (this as any).$http.get("/radiodj/npjson")
         .then((body: any) => {
-            this.status = (this.nowPlaying as any).Position < body.data.CurrentTrack.Position;
+            this.paused = (this.nowPlaying as any).Position === body.data.CurrentTrack.Position;
             this.nowPlaying = body.data.CurrentTrack;
         });
+    }
+
+    toggleAssisted() {
+        this.assisted = !this.assisted;
+        setAssisted(Number(this.assisted));
+    }
+
+    toggleAutoDJ() {
+        this.autoDJ = !this.autoDJ;
+        setAutoDJ(Number(this.autoDJ));
+    }
+
+    togglePlayback() {
+        this.paused = !this.paused;
+        pause(Number(this.paused));
     }
 
     get songProgress() {

@@ -14,9 +14,9 @@ import _ from 'lodash';
 @Component({
 })
 export default class CtrlBtn extends Vue {
-    @Prop({type: String})
+    @Prop({default: ''})
     icon: any;
-    @Prop({type: String})
+    @Prop({default: ''})
     tooltip: any;
     @Prop({default: false, type: Boolean})
     hide: any;

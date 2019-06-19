@@ -22,55 +22,55 @@ function getStatus(command: String, callback: Function) {
 }
 
 export function statusAutoDJ() {
-    return getStatus('StatusAutoDJ', next);
+    getStatus('StatusAutoDJ', (state: any) => { return state });
 }
 
 export function statusAssisted() {
-    return getStatus('StatusAssisted', next);
+    getStatus('StatusAssisted', (state: any) => { return state });
 }
 
 export function statusInput() {
-    return getStatus('StatusInput', next);
+    getStatus('StatusInput', (state: any) => { return state });
 }
 
 export function statusQueue() {
-    return getStatus('StatusQueue', next);
+    getStatus('StatusQueue', (state: any) => { return state });
 }
 
-export function toggleAutoDJ(state: Number) {
-    sendControl('EnableAutoDJ', state, next);
+export function setAutoDJ(state: Number) {
+    sendControl('EnableAutoDJ', state, (resp: any) => { return resp });
 }
 
-export function toggleAssisted(state: Number) {
-    sendControl('EnableAssisted', state, next);
+export function setAssisted(state: Number) {
+    sendControl('EnableAssisted', state, (resp: any) => { return resp });
 }
 
-export function toggleInput(state: Number) {
-    sendControl('EnableInput', state, next);
+export function setInput(state: Number) {
+    sendControl('EnableInput', state, (resp: any) => { return resp });
 }
 
 export function playNext(id: Number) {
-    sendControl('LoadTrackToTop', id, next);
+    sendControl('LoadTrackToTop', id, (resp: any) => { return resp });
 }
 
 export function loadFile(id: Number) {
-    sendControl('LoadTrackToBottom', id, next);
+    sendControl('LoadTrackToBottom', id, (resp: any) => { return resp });
 }
 
 export function loadPlaylist(id: Number) {
-    sendControl('LoadPlaylist', id, next);
+    sendControl('LoadPlaylist', id, (resp: any) => { return resp });
 }
 
 export function playItem(index: Number) {
-    sendControl('PlayPlaylistTrack', index, next);
+    sendControl('PlayPlaylistTrack', index, (resp: any) => { return resp });
 }
 
 export function removeItem(index: Number) {
-    sendControl('RemovePlaylistTrack', index, next);
+    sendControl('RemovePlaylistTrack', index, (resp: any) => { return resp });
 }
 
 export function playCart(index: Number) {
-    sendControl('PlaycartByNumber', index, next);
+    sendControl('PlaycartByNumber', index, (resp: any) => { return resp });
 }
 
 // simple control functions
@@ -105,6 +105,6 @@ export function refreshEvents(callback: any) {
     sendControl('RefreshEvents', '', callback);
 }
 
-export function toggleEvents(state: Number) {
-    sendControl('EnableEvents', state, next);
+export function setEvents(state: Number) {
+    sendControl('EnableEvents', state, (resp: any) => { return resp });
 }
