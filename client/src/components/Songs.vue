@@ -57,8 +57,8 @@ export default class Songs extends Vue {
     }
 
     play(id: number) {
-        loadFile(id);
-        next;
+        playNext(id);
+        next();
     }
 
     getSongs() {
