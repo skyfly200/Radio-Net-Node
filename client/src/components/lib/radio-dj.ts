@@ -16,8 +16,49 @@ function sendControl(command: String, arg: any, callback: Function) {
     .then( resp => callback(resp) );
 }
 
-export function loadFile(id: Number) {
+function getStatus(command: String, callback: Function) {
+    Axios.get("/radiodj/opt", { params: { command: command} })
+        .then(resp => callback(resp));
+}
+
+export function statusAutoDJ() {
+    return getStatus('StatusAutoDJ', next);
+}
+
+export function statusAssisted() {
+    return getStatus('StatusAssisted', next);
+}
+
+export function statusInput() {
+    return getStatus('StatusInput', next);
+}
+
+export function statusQueue() {
+    return getStatus('StatusQueue', next);
+}
+
+export function toggleAutoDJ(state: Number) {
+    sendControl('EnableAutoDJ', state, next);
+}
+
+export function toggleAssisted(state: Number) {
+    sendControl('EnableAssisted', state, next);
+}
+
+export function toggleInput(state: Number) {
+    sendControl('EnableInput', state, next);
+}
+
+export function playNext(id: Number) {
     sendControl('LoadTrackToTop', id, next);
+}
+
+export function loadFile(id: Number) {
+    sendControl('LoadTrackToBottom', id, next);
+}
+
+export function loadPlaylist(id: Number) {
+    sendControl('LoadPlaylist', id, next);
 }
 
 export function playItem(index: Number) {
@@ -26,6 +67,10 @@ export function playItem(index: Number) {
 
 export function removeItem(index: Number) {
     sendControl('RemovePlaylistTrack', index, next);
+}
+
+export function playCart(index: Number) {
+    sendControl('PlaycartByNumber', index, next);
 }
 
 // simple control functions
@@ -58,4 +103,8 @@ export function refreshEvents(callback: any) {
     var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : c;
 
     sendControl('RefreshEvents', '', callback);
+}
+
+export function toggleEvents(state: Number) {
+    sendControl('EnableEvents', state, next);
 }
