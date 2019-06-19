@@ -2,28 +2,27 @@
     v-bottom-nav.controls(app fixed)
         .progress-bar
             v-progress-linear(v-model="songProgress")
-        .player
-            .player-info.text-truncate
+        .player-info
+            .player-title.text-truncate
                 span {{ nowPlaying.Title }}
                 span.hidden-md-and-down {{ nowPlaying.Album }} - {{ nowPlaying.Artist }}
-            v-spacer
-            v-toolbar-items.player-controls
-                v-btn(@click='stop()' flat).hidden-md-and-down
-                    v-icon stop
-                v-btn(@click='restart()' flat)
-                    v-icon replay
-                v-btn(@click='pause(0)' flat v-if="!status")
-                    v-icon play_arrow
-                v-btn(@click='pause(1)' flat v-else)
-                    v-icon pause
-                v-btn(@click='next()' flat)
-                    v-icon skip_next
-                v-btn(@click='clear()' flat).hidden-md-and-down
-                    v-icon clear
             v-spacer
             .player-time.text-truncate
                 span {{ formatDuration(nowPlaying.Elapsed, 0) }}
                 span.hidden-md-and-down &nbsp;| {{ formatDuration(nowPlaying.Duration, 0) }}
+        v-toolbar-items.player-controls
+            v-btn(@click='stop()' flat).hidden-md-and-down
+                v-icon stop
+            v-btn(@click='restart()' flat)
+                v-icon replay
+            v-btn(@click='pause(0)' flat v-if="!status")
+                v-icon play_arrow
+            v-btn(@click='pause(1)' flat v-else)
+                v-icon pause
+            v-btn(@click='next()' flat)
+                v-icon skip_next
+            v-btn(@click='clear()' flat).hidden-md-and-down
+                v-icon clear
 </template>
 
 <script lang="ts">
@@ -78,14 +77,16 @@ export default class ControlBar extends Vue {
 .controls
     display: flex
     flex-direction: column
-    .player
+    .player-info
         width: 100%
         display: flex
         padding: 0 1em
-        .player-controls
-            display: flex
-        .player-info
+        .player-title
             font-size: 1.2em
+    .player-controls
+        width: 100%
+        display: flex
+        height: auto
     .progress-bar
         width: 100%
         .v-progress-linear
