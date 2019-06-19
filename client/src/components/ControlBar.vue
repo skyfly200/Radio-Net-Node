@@ -1,26 +1,26 @@
 <template lang="pug">
-    v-bottom-nav.controls
+    v-bottom-nav.controls(app fixed)
         .progress-bar
             v-progress-linear(v-model="songProgress")
         .player
-            .player-info
+            .player-info.text-truncate
                 span {{ nowPlaying.Album }} - {{ nowPlaying.Artist }}
             v-spacer
-            .player-controls
-                v-btn(@click='stop()' icon flat)
+            v-toolbar-items.player-controls
+                v-btn(@click='stop()' flat)
                     v-icon stop
-                v-btn(@click='restart()' icon flat)
+                v-btn(@click='restart()' flat)
                     v-icon replay
-                v-btn(@click='pause(0)' icon flat v-if="!status")
+                v-btn(@click='pause(0)' flat v-if="!status")
                     v-icon play_arrow
-                v-btn(@click='pause(1)' icon flat v-else)
+                v-btn(@click='pause(1)' flat v-else)
                     v-icon pause
-                v-btn(@click='next()' icon flat)
+                v-btn(@click='next()' flat)
                     v-icon skip_next
-                v-btn(@click='clear()' icon flat)
+                v-btn(@click='clear()' flat)
                     v-icon clear
             v-spacer
-            .player-time
+            .player-time.text-truncate
                 span {{ formatDuration(nowPlaying.Elapsed, 0) }} | {{ formatDuration(nowPlaying.Duration, 0) }}
 </template>
 
@@ -40,7 +40,7 @@ export default class ControlBar extends Vue {
         this.getNP();
         setInterval(function (this: any) {
         (this as any).getNP();
-        }.bind(this), 1000); 
+        }.bind(this), 500); 
 
         // get streams
     }
@@ -79,8 +79,11 @@ export default class ControlBar extends Vue {
     .player
         width: 100%
         display: flex
+        padding: 0 1em
         .player-controls
             display: flex
+        .player-info
+            font-size: 1.2em
     .progress-bar
         width: 100%
         .v-progress-linear
