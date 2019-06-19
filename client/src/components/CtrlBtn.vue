@@ -2,13 +2,14 @@
 v-tooltip(top).control-btn
     template(v-slot:activator="{ on }")
         .control(v-on="on" :class="{ 'hidden-md-and-down': hide }")
-            v-btn(@click.prevent="$emit('click')" flat)
+            v-btn(@click.prevent="debouncedClick()" flat)
                 v-icon {{ icon }}
     span {{ tooltip }}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import _ from 'lodash';
 
 @Component({
 })
@@ -19,6 +20,11 @@ export default class CtrlBtn extends Vue {
     tooltip: any;
     @Prop({default: false, type: Boolean})
     hide: any;
+
+    debouncedClick = _.debounce(this.click, 500);
+    click() {
+        this.$emit('click');
+    }
 }
 </script>
 
