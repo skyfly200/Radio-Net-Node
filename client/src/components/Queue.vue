@@ -10,7 +10,7 @@
             td {{ distanceInWordsToNow(props.item.DatePlayed) }} ago
             td {{ props.item.Year }}
             td.justify-center.layout.px-0
-                CtrlIcon.mr-2(icon='play_arrow' @click='playItem(props.index + 1)' tooltip='Play')
+                CtrlIcon.mr-2(icon='play_arrow' @click='playItem(props.index)' tooltip='Play')
                 CtrlIcon(icon='close' @click='removeItem(props.index)' tooltip='Remove')
 </template>
 
