@@ -20,7 +20,7 @@
             td.justify-center.layout.px-0
                 CtrlIcon.mr-2(icon='play_arrow' @click='play(props.item.ID)' tooltip='Play')
                 CtrlIcon.mr-2(icon='playlist_add' @click='loadFile(props.item.ID)' tooltip='Add to Queue')
-                CtrlIcon(icon='queue_play_next' @click='playNext(props.item.ID)' tooltip='Play Next')
+                CtrlIcon(icon='playlist_play' @click='playNext(props.item.ID)' tooltip='Play Next')
         template(v-slot:no-results)
             v-alert(:value="true" color="error" icon="warning") Your search for "{{ search }}" found no results.
 </template>
