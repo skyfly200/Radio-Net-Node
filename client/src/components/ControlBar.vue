@@ -15,11 +15,11 @@
                 CtrlBtn(:icon="assisted ? 'music_off' : 'music_note'" @click='toggleAssisted()' :tooltip="assisted ? 'Enable Auto Advance' : 'Disable Auto Advance'" hide)
                 CtrlBtn(:icon="autoDJ ? 'album' : 'queue'" @click='toggleAutoDJ()' :tooltip="autoDJ ? 'Disable Auto DJ' : 'Enable Auto DJ'" hide)
                 CtrlBtn(icon='delete_sweep' @click='clear()' tooltip='Clear Playlist' hide)
+                CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
             .main-ctrls.ctrls
+                CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
                 CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'" hide)
                 CtrlBtn(icon='skip_next' @click='next()' tooltip='Next Song')
-                CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
-                CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
             .more.ctrls
                 CtrlBtn(icon='more_vert' @click='' tooltip='More Options')
 
@@ -49,7 +49,7 @@ export default class ControlBar extends Vue {
         (this as any).getNP();
         }.bind(this), 500);
     }
-    
+
     getNP() {
         (this as any).$http.get("/radiodj/npjson")
         .then((body: any) => {
