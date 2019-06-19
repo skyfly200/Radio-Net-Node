@@ -10,19 +10,21 @@
             td {{ distanceInWordsToNow(props.item.DatePlayed) }} ago
             td {{ props.item.Year }}
             td.justify-center.layout.px-0
-                v-icon.mr-2(@click="playItem(props.index)") play_arrow
-                v-icon(@click="removeItem(props.index)") close
+                CtrlIcon.mr-2(icon='play_arrow' @click='playItem(props.index + 1)' tooltip='Play')
+                CtrlIcon(icon='close' @click='removeItem(props.index)' tooltip='Remove')
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { next, playItem, removeItem } from "./lib/radio-dj";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+import CtrlIcon from "./CtrlIcon.vue";
 
 @Component({
     props: {
         queue: Array
     },
+    components: { CtrlIcon },
     methods: { next, playItem, removeItem, distanceInWordsToNow }
 })
 export default class Queue extends Vue {

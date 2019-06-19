@@ -18,19 +18,23 @@
             td {{ props.item.year }}
             td {{ props.item["count_played"] }}
             td.justify-center.layout.px-0
-                v-icon.mr-2(@click="play(props.item.ID)") play_arrow
+                CtrlIcon.mr-2(icon='play_arrow' @click='play(props.item.ID)' tooltip='Play')
+                CtrlIcon.mr-2(icon='playlist_add' @click='loadFile(props.item.ID)' tooltip='Add to Queue')
+                CtrlIcon(icon='queue_play_next' @click='playNext(props.item.ID)' tooltip='Play Next')
         template(v-slot:no-results)
             v-alert(:value="true" color="error" icon="warning") Your search for "{{ search }}" found no results.
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-
-import { loadFile, next } from "./lib/radio-dj";
+import _ from 'lodash';
+import { playNext, loadFile, next } from "./lib/radio-dj";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+import CtrlIcon from "./CtrlIcon.vue";
 
 @Component({
-    methods: { loadFile, next, distanceInWordsToNow }
+    methods: { playNext, loadFile, next, distanceInWordsToNow },
+    components: { CtrlIcon }
 })
 export default class Songs extends Vue {
     songs = [];
@@ -50,9 +54,6 @@ export default class Songs extends Vue {
     created() {
         // init now playing and playlist
         this.getSongs();
-        setInterval(function (this: any) {
-            (this as any).getSongs();
-            }.bind(this), 1000);
     }
 
     play(id: number) {
