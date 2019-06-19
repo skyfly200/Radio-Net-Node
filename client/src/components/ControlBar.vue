@@ -18,7 +18,7 @@
                 CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
             .main-ctrls.ctrls
                 CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
-                CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'" hide)
+                CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'")
                 CtrlBtn(icon='skip_next' @click='next()' tooltip='Next Song')
             .more.ctrls
                 CtrlBtn(icon='more_vert' @click='' tooltip='More Options')
@@ -69,8 +69,7 @@ export default class ControlBar extends Vue {
     }
 
     togglePlayback() {
-        this.paused = !this.paused;
-        pause(Number(this.paused));
+        pause(Number(!this.paused));
     }
 
     get songProgress() {
