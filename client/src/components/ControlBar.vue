@@ -1,5 +1,5 @@
 <template lang="pug">
-    v-bottom-nav.controls(app fixed)
+    v-bottom-nav.controls(app fixed :active.sync="activeBtn")
         .progress-bar
             v-progress-linear(v-model="songProgress")
         .player-info
@@ -11,30 +11,34 @@
                 span {{ formatDuration(nowPlaying.Elapsed, 0) }}
                 span.hidden-md-and-down &nbsp;| {{ formatDuration(nowPlaying.Duration, 0) }}
         v-toolbar-items.player-controls
-            v-btn(@click='stop()' flat).hidden-md-and-down
-                v-icon stop
-            v-btn(@click='restart()' flat)
-                v-icon replay
-            v-btn(@click='pause(0)' flat v-if="!status")
-                v-icon play_arrow
-            v-btn(@click='pause(1)' flat v-else)
-                v-icon pause
-            v-btn(@click='next()' flat)
-                v-icon skip_next
-            v-btn(@click='clear()' flat).hidden-md-and-down
-                v-icon clear
+            .toggles.ctrls
+                CtrlBtn(icon='pause_circle_outline' @click='' tooltip='Toggle Automated' hide)
+                CtrlBtn(icon='album' @click='' tooltip='Toggle Auto DJ' hide)
+                CtrlBtn(icon='delete_sweep' @click='clear()' tooltip='Clear Playlist' hide)
+            .main-ctrls.ctrls
+                CtrlBtn(icon='play_arrow' @click='pause(0)' tooltip='Play' v-if="!status")
+                CtrlBtn(icon='pause' @click='pause(1)' tooltip='Pause' v-else)
+                CtrlBtn(icon='skip_next' @click='next()' tooltip='Next Song')
+                CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
+                CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
+            .more.ctrls
+                CtrlBtn(icon='more_vert' @click='' tooltip='More Options')
+
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { pause, restart, next, stop, clear, loadFile } from "./lib/radio-dj";
+import CtrlBtn from "./CtrlBtn.vue";
 
 @Component({
-    methods: { pause, restart, next, stop, clear }
+    methods: { pause, restart, next, stop, clear },
+    components: { CtrlBtn }
 })
 export default class ControlBar extends Vue {
     nowPlaying: any = {};
     status: Boolean = false;
+    activeBtn: number = 2;
 
     created() {
         // init now playing and playlist
@@ -77,6 +81,8 @@ export default class ControlBar extends Vue {
 .controls
     display: flex
     flex-direction: column
+    .ctrls
+        display: flex
     .player-info
         width: 100%
         display: flex
@@ -87,6 +93,7 @@ export default class ControlBar extends Vue {
         width: 100%
         display: flex
         height: auto
+        justify-content: space-between
     .progress-bar
         width: 100%
         .v-progress-linear
