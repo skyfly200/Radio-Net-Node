@@ -4,10 +4,11 @@
             v-progress-linear(v-model="songProgress")
         .player
             .player-info.text-truncate
-                span {{ nowPlaying.Album }} - {{ nowPlaying.Artist }}
+                span {{ nowPlaying.Title }}
+                span.hidden-md-and-down {{ nowPlaying.Album }} - {{ nowPlaying.Artist }}
             v-spacer
             v-toolbar-items.player-controls
-                v-btn(@click='stop()' flat)
+                v-btn(@click='stop()' flat).hidden-md-and-down
                     v-icon stop
                 v-btn(@click='restart()' flat)
                     v-icon replay
@@ -17,11 +18,12 @@
                     v-icon pause
                 v-btn(@click='next()' flat)
                     v-icon skip_next
-                v-btn(@click='clear()' flat)
+                v-btn(@click='clear()' flat).hidden-md-and-down
                     v-icon clear
             v-spacer
             .player-time.text-truncate
-                span {{ formatDuration(nowPlaying.Elapsed, 0) }} | {{ formatDuration(nowPlaying.Duration, 0) }}
+                span {{ formatDuration(nowPlaying.Elapsed, 0) }}
+                span.hidden-md-and-down &nbsp;| {{ formatDuration(nowPlaying.Duration, 0) }}
 </template>
 
 <script lang="ts">
