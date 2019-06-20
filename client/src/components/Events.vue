@@ -13,7 +13,8 @@
             td {{ props.item.name }}
             td {{ types[props.item.type] }}
             td {{ formatTime(props.item) }}
-            td {{ props.item.catagory }}
+            td {{ props.item.category }}
+            td {{ props.item.enabled }}
             td.justify-center.layout.px-0
                 CtrlIcon.mr-2(icon='edit' @click='' tooltip='Edit Event')
                 CtrlIcon(icon='delete' @click='' tooltip='Delet Event')
@@ -41,7 +42,9 @@ export default class Events extends Vue {
         { text: 'Name', value: 'name', sortable: false },
         { text: 'Type', value: 'type', sortable: false },
         { text: 'Time', value: 'time', sortable: false },
-        { text: 'Catagory', value: 'catagory', sortable: false }
+        { text: 'Category', value: 'category', sortable: false },
+        { text: 'Enabled', value: 'enabled', sortable: false },
+        { text: 'Controls', sortable: false }
     ];
 
     created() {
