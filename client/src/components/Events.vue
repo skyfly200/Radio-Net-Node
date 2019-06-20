@@ -1,6 +1,12 @@
 <template lang="pug">
 .events
-    h2 Events
+    .header
+        h2 Events
+        v-spacer
+        .ctrls
+            CtrlBtn(:icon="eventsOn ? 'stop' : 'play_arrow'" @click='toggleEvents()' :tooltip="eventsOn ? 'Stop Events' : 'Start Events'")
+            CtrlBtn(icon='add' @click='' tooltip='Add Event')
+            CtrlBtn(icon='update' @click='' tooltip='Refresh Events')
     v-data-table(:headers="headers" :items="events" :total-items="events.length" hide-actions)
         template(v-slot:items="props")
             td {{ props.item.ID }}
@@ -12,19 +18,24 @@
             td {{ props.item.hours }}
             td {{ props.item.catagory }}
             td.justify-center.layout.px-0
-                v-icon.mr-2(@click="") edit
-                v-icon(@click="") delete
+                CtrlIcon.mr-2(icon='edit' @click='' tooltip='Edit Event')
+                CtrlIcon(icon='delete' @click='' tooltip='Delet Event')
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+import { setEvents } from "./lib/radio-dj";
+import CtrlBtn from "./CtrlBtn.vue";
+import CtrlIcon from "./CtrlIcon.vue";
 
 @Component({
-    methods: { distanceInWordsToNow }
+    methods: { distanceInWordsToNow },
+    components: { CtrlBtn, CtrlIcon }
 })
 export default class Events extends Vue {
     events = [];
+    eventsOn = false;
     headers = [
         { text: 'ID', value: 'ID', align: 'left', sortable: false },
         { text: 'Name', value: 'name', sortable: false },
@@ -44,6 +55,11 @@ export default class Events extends Vue {
             }.bind(this), 1000);
     }
 
+    toggleEvents() {
+        this.eventsOn = !this.eventsOn;
+        setEvents(Number(this.eventsOn));
+    }
+
     getEvents() {
         (this as any).$http.get("/db/query?q=events")
         .then((body: any) => {
@@ -52,3 +68,9 @@ export default class Events extends Vue {
     }
 }
 </script>
+
+<style lang="sass" scoped>
+    .header, .ctrls
+        display: flex
+</style>
+
