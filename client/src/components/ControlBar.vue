@@ -16,7 +16,7 @@
                 CtrlBtn(:icon="autoDJ ? 'album' : 'queue'" @click='toggleAutoDJ()' :tooltip="autoDJ ? 'Disable Auto DJ' : 'Enable Auto DJ'" hide)
                 CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
             .main-ctrls.ctrls
-                CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
+                CtrlBtn(icon='skip_previous' @click='restart()' tooltip='Restart Song')
                 CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'")
                 CtrlBtn(icon='skip_next' @click='next()' tooltip='Next Song')
             .more.ctrls
@@ -30,11 +30,27 @@
                                 v-btn(icon)
                                     v-icon(color="grey lighten-1") delete_sweep
                             v-list-tile-title Clear Playlist
+                        v-list-tile(@click="stop()")
+                            v-list-tile-action
+                                v-btn(icon)
+                                    v-icon(color="grey lighten-1") stop
+                            v-list-tile-title Stop Playback
                         v-list-tile(@click="toggleEvents()")
                             v-list-tile-action
                                 v-btn(icon)
-                                    v-icon(color="grey lighten-1") {{ events ? 'alarm' : 'alarm_off'}}
+                                    v-icon(color="grey lighten-1") {{ events ? 'alarm' : 'alarm_off' }}
                             v-list-tile-title {{ events ? "Disable Events" : "Enable Events" }}
+                        v-list-tile(@click="toggleAssisted()")
+                            v-list-tile-action
+                                v-btn(icon)
+                                    v-icon(color="grey lighten-1") {{ assisted ? 'music_off' : 'music_note' }}
+                            v-list-tile-title {{ assisted ? 'Enable Auto Advance' : 'Disable Auto Advance' }}
+                        v-list-tile(@click="toggleAutoDJ()")
+                            v-list-tile-action
+                                v-btn(icon)
+                                    v-icon(color="grey lighten-1") {{ autoDJ ? 'album' : 'queue' }}
+                            v-list-tile-title {{ autoDJ ? 'Disable Auto DJ' : 'Enable Auto DJ' }}
+                
 
 </template>
 
