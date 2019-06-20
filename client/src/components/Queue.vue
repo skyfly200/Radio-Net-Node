@@ -40,7 +40,7 @@ export default class Queue extends Vue {
         { text: 'Duration', value: 'Duration', sortable: false },
         { text: 'Last Played', value: 'DatePlayed', sortable: false },
         { text: 'Released', value: 'Year', sortable: false },
-        { text: 'Actions', value: 'name', sortable: false }
+        { text: 'Controls', sortable: false }
     ];
 
     formatDuration(d: number) {

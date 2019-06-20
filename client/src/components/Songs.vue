@@ -48,7 +48,8 @@ export default class Songs extends Vue {
         { text: 'Duration', value: 'duration', sortable: false },
         { text: 'Last Played', value: 'date_played', sortable: false },
         { text: 'Released', value: 'year', sortable: false },
-        { text: 'Play Count', value: 'count_played', sortable: false }
+        { text: 'Play Count', value: 'count_played', sortable: false },
+        { text: 'Controls', sortable: false }
     ];
 
     created() {
