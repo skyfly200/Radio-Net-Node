@@ -69,7 +69,7 @@ export default class ControlBar extends Vue {
     paused: Boolean = false;
     assisted: Boolean = false;
     autoDJ: Boolean = false;
-    events: Boolean = false;
+    events: Boolean = true;
 
     created() {
         // init now paused and playlist
@@ -109,9 +109,8 @@ export default class ControlBar extends Vue {
     }
 
     get songProgress() {
-        let d = this.nowPlaying.Duration;
-        let e = this.nowPlaying.Elapsed;
-        return 100 * ( e / d );
+        let np = this.nowPlaying;
+        return (np.Enabled ? 100 * ( np.Elapsed / np.Duration ) : 0);
     }
 
     formatDuration(d: number, a: number) {
