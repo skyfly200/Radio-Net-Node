@@ -14,24 +14,37 @@
             .toggles.ctrls
                 CtrlBtn(:icon="assisted ? 'music_off' : 'music_note'" @click='toggleAssisted()' :tooltip="assisted ? 'Enable Auto Advance' : 'Disable Auto Advance'" hide)
                 CtrlBtn(:icon="autoDJ ? 'album' : 'queue'" @click='toggleAutoDJ()' :tooltip="autoDJ ? 'Disable Auto DJ' : 'Enable Auto DJ'" hide)
-                CtrlBtn(icon='delete_sweep' @click='clear()' tooltip='Clear Playlist' hide)
                 CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
             .main-ctrls.ctrls
                 CtrlBtn(icon='replay' @click='restart()' tooltip='Restart Song')
                 CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'")
                 CtrlBtn(icon='skip_next' @click='next()' tooltip='Next Song')
             .more.ctrls
-                CtrlBtn(icon='more_vert' @click='' tooltip='More Options')
+                v-menu(nudge-top='60px' nudge-right='1em' min-width="150px")
+                    template( v-slot:activator="{ on }")
+                        v-btn(v-on="on")
+                            v-icon more_vert
+                    v-list
+                        v-list-tile(@click="clear()")
+                            v-list-tile-action
+                                v-btn(icon)
+                                    v-icon(color="grey lighten-1") delete_sweep
+                            v-list-tile-title Clear Playlist
+                        v-list-tile(@click="toggleEvents()")
+                            v-list-tile-action
+                                v-btn(icon)
+                                    v-icon(color="grey lighten-1") {{ events ? 'alarm' : 'alarm_off'}}
+                            v-list-tile-title {{ events ? "Disable Events" : "Enable Events" }}
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { pause, restart, next, stop, clear, loadFile, statusAutoDJ, statusAssisted, setAssisted, setAutoDJ } from "./lib/radio-dj";
+import { pause, restart, next, stop, clear, loadFile, statusAutoDJ, statusAssisted, setAssisted, setAutoDJ, setEvents } from "./lib/radio-dj";
 import CtrlBtn from "./CtrlBtn.vue";
 
 @Component({
-    methods: { pause, restart, next, stop, clear, setAssisted, setAutoDJ },
+    methods: { pause, restart, next, stop, clear, setAssisted, setAutoDJ, setEvents },
     components: { CtrlBtn }
 })
 export default class ControlBar extends Vue {
@@ -39,6 +52,7 @@ export default class ControlBar extends Vue {
     paused: Boolean = false;
     assisted: Boolean = false;
     autoDJ: Boolean = false;
+    events: Boolean = false;
 
     created() {
         // init now paused and playlist
@@ -66,6 +80,11 @@ export default class ControlBar extends Vue {
     toggleAutoDJ() {
         this.autoDJ = !this.autoDJ;
         setAutoDJ(Number(this.autoDJ));
+    }
+
+    toggleEvents() {
+        this.events = !this.events;
+        setEvents(Number(this.events));
     }
 
     togglePlayback() {
