@@ -14,10 +14,13 @@
             td {{ types[props.item.type] }}
             td {{ formatTime(props.item) }}
             td {{ props.item.category }}
-            td {{ props.item.enabled }}
+            td.justify-center
+                CtrlIcon.mr-2(:icon="props.item.enabled === 'True' ? 'toggle_on' : 'toggle_off'" 
+                    :tooltip="props.item.enabled === 'True' ? 'Disable Event' : 'Enable Event'"
+                    @click='' large)
             td.justify-center.layout.px-0
                 CtrlIcon.mr-2(icon='edit' @click='' tooltip='Edit Event')
-                CtrlIcon(icon='delete' @click='' tooltip='Delet Event')
+                CtrlIcon(icon='delete' @click='' tooltip='Delete Event')
 </template>
 
 <script lang="ts">
