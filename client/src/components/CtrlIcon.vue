@@ -2,7 +2,7 @@
 v-tooltip(top).control-btn
     template(v-slot:activator="{ on }")
         .control(v-on="on" :class="{ 'hidden-md-and-down': hide }")
-            v-icon(@click.prevent="debouncedClick()") {{ icon }}
+            v-icon(@click.prevent="debouncedClick()" :small="small" :large="large") {{ icon }}
     span {{ tooltip }}
 </template>
 
@@ -19,6 +19,10 @@ export default class CtrlIcon extends Vue {
     tooltip: any;
     @Prop({default: false, type: Boolean})
     hide: any;
+    @Prop({default: false, type: Boolean})
+    large: any;
+    @Prop({default: false, type: Boolean})
+    small: any;
 
     debouncedClick = _.debounce(this.click, 500);
     click() {
