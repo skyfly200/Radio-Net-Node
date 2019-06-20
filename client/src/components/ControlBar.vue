@@ -15,6 +15,7 @@
                 CtrlBtn(:icon="assisted ? 'music_off' : 'music_note'" @click='toggleAssisted()' :tooltip="assisted ? 'Enable Auto Advance' : 'Disable Auto Advance'" hide)
                 CtrlBtn(:icon="autoDJ ? 'album' : 'queue'" @click='toggleAutoDJ()' :tooltip="autoDJ ? 'Disable Auto DJ' : 'Enable Auto DJ'" hide)
                 CtrlBtn(icon='stop' @click='stop()' tooltip='Stop Playback' hide)
+                .filler.hidden-lg-and-up
             .main-ctrls.ctrls
                 CtrlBtn(icon='skip_previous' @click='restart()' tooltip='Restart Song')
                 CtrlBtn(:icon="paused ? 'play_arrow' : 'pause'" @click='togglePlayback()' :tooltip="paused ? 'Play' : 'Pause'")
@@ -77,7 +78,7 @@ export default class ControlBar extends Vue {
         // this.autoDJ = statusAutoDJ();
         setInterval(function (this: any) {
         (this as any).getNP();
-        }.bind(this), 500);
+        }.bind(this), 1000);
     }
 
     getNP() {
@@ -133,6 +134,10 @@ export default class ControlBar extends Vue {
     flex-direction: column
     .ctrls
         display: flex
+    .filler
+        min-width: 80px
+    .more button
+        padding: 5px 0 !important
     .player-info
         width: 100%
         display: flex

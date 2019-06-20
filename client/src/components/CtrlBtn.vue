@@ -33,6 +33,7 @@ export default class CtrlBtn extends Vue {
 </script>
 
 <style lang="sass" scoped>
-.control button
+.ctrls button
     min-width: 40px !important
+    padding: 5px 0 !important
 </style>
