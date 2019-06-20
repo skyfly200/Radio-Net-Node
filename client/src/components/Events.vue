@@ -35,7 +35,8 @@ export default class Events extends Vue {
     events = [];
     eventsOn = true;
 
-    types = ["One Time Only", "Repeat by Day", "Repeat by Day and Hour", "Manual Event", "Start-up Event", "Repeat by Date", "Repeat by Date and Hour", ];
+    types = ["One Time Only", "Repeat by Day", "Repeat by Day and Hour", "Manual Event", "Start-up Event", "Repeat by Date", "Repeat by Date and Hour"];
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     headers = [
         { text: 'ID', value: 'ID', align: 'left', sortable: false },
@@ -57,16 +58,28 @@ export default class Events extends Vue {
         setEvents(Number(this.eventsOn));
     }
 
+    preParse(value: string) {
+        return value.split('&').slice(1);
+    }
+
+    numSort(a: string, b: string): number {
+        let aN = Number(a);
+        let bN = Number(b);
+        return ( (aN < bN) ? -1 : (aN === bN ? 0 : 1) );
+    }
+
     formatTime(item: any) {
         switch(item.type) {
             case 0: 
-                return `${item.time} ${format(item.date, 'MM/DD/YY')}`;
+                return `${item.time}
+                        ${format(item.date, 'MM/DD/YY')}`;
                 break;
             case 1: 
-                return `${item.day.split('&').slice(1)}`;
+                return `${this.preParse(item.day).sort(this.numSort).map((d: any) => this.days[d])}`;
                 break;
             case 2: 
-                return `${item.day.split('&').slice(1)} ${item.hours.split('&').slice(1)}`;
+                return `${this.preParse(item.day).sort(this.numSort).map((d: any) => this.days[d])}
+                        ${this.preParse(item.hours).sort(this.numSort)}`;
                 break;
             case 3: 
                 return "-";
@@ -75,7 +88,8 @@ export default class Events extends Vue {
                 return "-";
                 break;
             default:
-                return `${item.time} ${format(item.date, 'MM/DD/YY')}`;
+                return `${item.time}
+                        ${format(item.date, 'MM/DD/YY')}`;
         }
     }
 
