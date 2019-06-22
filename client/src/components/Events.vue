@@ -20,7 +20,7 @@
                     @click='' large)
             td.justify-center.layout.px-0
                 CtrlIcon.mr-2(icon='edit' @click='' tooltip='Edit Event')
-                CtrlIcon(icon='delete' @click='' tooltip='Delete Event')
+                CtrlIcon(icon='delete' @click='deleteEvent(props.item.ID)' tooltip='Delete Event')
 </template>
 
 <script lang="ts">
@@ -98,6 +98,13 @@ export default class Events extends Vue {
 
     getEvents() {
         (this as any).$http.get("/db/query?q=events")
+        .then((body: any) => {
+            this.events = body.data;
+        });
+    }
+
+    deleteEvent(id: Number) {
+        (this as any).$http.get("/db/query?q=event_delete&id=" + id)
         .then((body: any) => {
             this.events = body.data;
         });

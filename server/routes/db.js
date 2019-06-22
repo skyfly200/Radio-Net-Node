@@ -57,7 +57,7 @@ var querys = {
     },
     "event_delete": {
         template: "DELETE FROM events WHERE ID = ?",
-        params: [{ key: "id", type: Number }]
+        params: [{ key: "id" }]
     },
     "event_categories": {
         template: "SELECT * from events_categories",
@@ -115,7 +115,7 @@ function queryDatabase(queryParams, callback) {
         //console.log(args)
 
         var queryFormated = mysql.format(query.template, args);
-        console.log(queryFormated);
+        //console.log(queryFormated);
 
         connection.query(queryFormated, function (err, rows) {
             connection.release();
@@ -134,48 +134,9 @@ function queryDatabase(queryParams, callback) {
 // -- API Routing
 
 router.get("/query", function (req, res) {
-    if (typeof req.query.q === 'undefined') return res.send("Incorect query (q) parameter: " + query);
+    if (typeof req.query.q === 'undefined') return res.send("Undefined query parameter");
     queryDatabase(req.query, function (data) {
         res.json(data);
-    });
-});
-
-router.get("/event-form", function (req, res) {
-    var id = req.query.id;
-    var copy = req.query.copy;
-    if (typeof id === 'undefined') { id = -1; }
-    queryDatabase('event_get', [id], function (eventData) {
-        // edit event if id exists, else serve empty form
-        var values = (eventData[0] === undefined ? {} : eventData[0]);
-        values.id = id;
-        if (values && copy) {
-            values.title = ('Copy Event ' + id);
-            values.action = '/event-new';
-        } else if (values) {
-            values.title = ('Edit Event ' + id);
-            values.action = '/event-update';
-        } else {
-            values = { title: 'New Event', enabled: 'True', action: '/event-new' };
-        }
-        queryDatabase('event_categories', [], function (resp) {
-            if (resp[0] !== undefined) {
-                var cats = [];
-                var catIDs = [];
-                for (var i = 0; i < resp.length; i++) {
-                    cats.push(resp[i].name);
-                    catIDs.push(resp[i].ID);
-                }
-                values.categories = cats;
-                values.catIDs = catIDs;
-            } else {
-                values.categories = {};
-                values.catIDs = {};
-            }
-            values.date = moment(values.date).format('YYYY-MM-DD');
-            values.types = event_run_types;
-            //console.log(values);
-            res.render('event_form', values);
-        });
     });
 });
 
@@ -197,7 +158,7 @@ router.get("/event-new", function (req, res) {
     //console.log(values);
     queryDatabase('event_new', values, function (resp) {
         //console.log(resp);
-        res.redirect('/events');
+        res.send(resp);
     });
 });
 
@@ -216,7 +177,14 @@ router.get("/event-update", function (req, res) {
         req.query.id
     ];
     queryDatabase('event_update', values, function (resp) {
-        res.redirect('/events');
+        res.send(resp);
+    });
+});
+
+// enable / disable an event
+router.get("/event-toggle", function (req, res) {
+    queryDatabase('event_update', values, function (resp) {
+        res.send(resp);
     });
 });
 
